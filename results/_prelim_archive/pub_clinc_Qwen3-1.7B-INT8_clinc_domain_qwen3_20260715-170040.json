@@ -1,0 +1,3019 @@
+{
+  "dataset": "clinc",
+  "model": "Qwen3-1.7B-INT8",
+  "prompt": "clinc_domain_qwen3",
+  "device": "GPU.1",
+  "pipe_config": {
+    "ATTENTION_BACKEND": "PA"
+  },
+  "samples": 500,
+  "accuracy": 0.676,
+  "unparseable": 0,
+  "random_baseline": 0.1,
+  "latency_ms": {
+    "p50": 33.77200799877755,
+    "p95": 49.95634700753726
+  },
+  "per_query": [
+    {
+      "q": "what's the estimated travel time to get to dc via bus",
+      "gold": "auto_commute",
+      "pred": "travel",
+      "raw": "F"
+    },
+    {
+      "q": "i think i've misplaced my phone",
+      "gold": "utility",
+      "pred": "small_talk",
+      "raw": "I"
+    },
+    {
+      "q": "alter your accent",
+      "gold": "meta",
+      "pred": "small_talk",
+      "raw": "I"
+    },
+    {
+      "q": "can you roll a die for me",
+      "gold": "utility",
+      "pred": "small_talk",
+      "raw": "I"
+    },
+    {
+      "q": "i wanna know the carry-on rules for the flight i have",
+      "gold": "travel",
+      "pred": "travel",
+      "raw": "F"
+    },
+    {
+      "q": "how much have i spent on tires this month",
+      "gold": "banking",
+      "pred": "banking",
+      "raw": "A"
+    },
+    {
+      "q": "would you freeze my bank account",
+      "gold": "banking",
+      "pred": "meta",
+      "raw": "J"
+    },
+    {
+      "q": "what do i do to order new checkbooks for my well's fargo account",
+      "gold": "banking",
+      "pred": "banking",
+      "raw": "A"
+    },
+    {
+      "q": "what oil do i use when changing oil and how do i do it",
+      "gold": "auto_commute",
+      "pred": "auto_commute",
+      "raw": "E"
+    },
+    {
+      "q": "what is the number of pto days i have left",
+      "gold": "work",
+      "pred": "work",
+      "raw": "H"
+    },
+    {
+      "q": "i need to use pto on october 5th to october 10th",
+      "gold": "work",
+      "pred": "work",
+      "raw": "H"
+    },
+    {
+      "q": "please put in a vacation request",
+      "gold": "work",
+      "pred": "small_talk",
+      "raw": "I"
+    },
+    {
+      "q": "how much cash do i have in my various bank accounts",
+      "gold": "banking",
+      "pred": "banking",
+      "raw": "A"
+    },
+    {
+      "q": "what date is it tomorrow",
+      "gold": "utility",
+      "pred": "utility",
+      "raw": "G"
+    },
+    {
+      "q": "i'll be travelling to russia from april 1 through april 20 and need my financial institute apprised of it",
+      "gold": "travel",
+      "pred": "banking",
+      "raw": "A"
+    },
+    {
+      "q": "i need my dinner reservation canceled",
+      "gold": "kitchen_dining",
+      "pred": "kitchen_dining",
+      "raw": "C"
+    },
+    {
+      "q": "what are the travel alerts for the us",
+      "gold": "travel",
+      "pred": "travel",
+      "raw": "F"
+    },
+    {
+      "q": "is my apr rate above average",
+      "gold": "credit_cards",
+      "pred": "credit_cards",
+      "raw": "B"
+    },
+    {
+      "q": "i am in need of new checks i'm completely out of mine",
+      "gold": "banking",
+      "pred": "banking",
+      "raw": "A"
+    },
+    {
+      "q": "will having my shots updated be a good idea, before i travel to south america",
+      "gold": "travel",
+      "pred": "small_talk",
+      "raw": "I"
+    },
+    {
+      "q": "what are the rules for traveling with toothpaste",
+      "gold": "travel",
+      "pred": "small_talk",
+      "raw": "I"
+    },
+    {
+      "q": "i want the interest rate for my checking account",
+      "gold": "banking",
+      "pred": "banking",
+      "raw": "A"
+    },
+    {
+      "q": "speak with a male british accent",
+      "gold": "meta",
+      "pred": "small_talk",
+      "raw": "I"
+    },
+    {
+      "q": "repeat what the weather will be like",
+      "gold": "banking",
+      "pred": "utility",
+      "raw": "G"
+    },
+    {
+      "q": "what did you just say",
+      "gold": "meta",
+      "pred": "small_talk",
+      "raw": "I"
+    },
+    {
+      "q": "what do my pto days amount to",
+      "gold": "work",
+      "pred": "work",
+      "raw": "H"
+    },
+    {
+      "q": "is cheesecake factory busy right now",
+      "gold": "kitchen_dining",
+      "pred": "kitchen_dining",
+      "raw": "C"
+    },
+    {
+      "q": "change to the woman voice",
+      "gold": "meta",
+      "pred": "meta",
+      "raw": "J"
+    },
+    {
+      "q": "if i lost my luggage, what should i do next",
+      "gold": "travel",
+      "pred": "travel",
+      "raw": "F"
+    },
+    {
+      "q": "i need to know what 25 times 38 is",
+      "gold": "utility",
+      "pred": "utility",
+      "raw": "G"
+    },
+    {
+      "q": "i need you to tell me the credit limit for my republic bank card",
+      "gold": "credit_cards",
+      "pred": "credit_cards",
+      "raw": "B"
+    },
+    {
+      "q": "i need my bank account frozen",
+      "gold": "banking",
+      "pred": "banking",
+      "raw": "A"
+    },
+    {
+      "q": "i want some nike's, is there enough in my wells fargo account",
+      "gold": "banking",
+      "pred": "banking",
+      "raw": "A"
+    },
+    {
+      "q": "i think someone jacked my bank account",
+      "gold": "banking",
+      "pred": "banking",
+      "raw": "A"
+    },
+    {
+      "q": "can you confirm the reservation at fleming's for jane",
+      "gold": "kitchen_dining",
+      "pred": "kitchen_dining",
+      "raw": "C"
+    },
+    {
+      "q": "i'd like to know what song this is",
+      "gold": "home",
+      "pred": "small_talk",
+      "raw": "I"
+    },
+    {
+      "q": "does osteria francescana take reservations",
+      "gold": "kitchen_dining",
+      "pred": "kitchen_dining",
+      "raw": "C"
+    },
+    {
+      "q": "make a call for me to the vet",
+      "gold": "utility",
+      "pred": "meta",
+      "raw": "J"
+    },
+    {
+      "q": "do you speak english",
+      "gold": "meta",
+      "pred": "small_talk",
+      "raw": "I"
+    },
+    {
+      "q": "\"i'm going on a flight from lax and going to phl, which is only $120 on june 15th",
+      "gold": "travel",
+      "pred": "travel",
+      "raw": "F"
+    },
+    {
+      "q": "place an order for my whole shopping list",
+      "gold": "home",
+      "pred": "home",
+      "raw": "D"
+    },
+    {
+      "q": "how much did i spend on my most recent transaction",
+      "gold": "banking",
+      "pred": "banking",
+      "raw": "A"
+    },
+    {
+      "q": "this charge is bs",
+      "gold": "banking",
+      "pred": "meta",
+      "raw": "J"
+    },
+    {
+      "q": "what subjects are you experienced in",
+      "gold": "small_talk",
+      "pred": "small_talk",
+      "raw": "I"
+    },
+    {
+      "q": "are the reviews ned get's good",
+      "gold": "kitchen_dining",
+      "pred": "small_talk",
+      "raw": "I"
+    },
+    {
+      "q": "what song is this one",
+      "gold": "home",
+      "pred": "small_talk",
+      "raw": "I"
+    },
+    {
+      "q": "how can i find out what my tire pressure is",
+      "gold": "auto_commute",
+      "pred": "auto_commute",
+      "raw": "E"
+    },
+    {
+      "q": "call me mike from now on",
+      "gold": "meta",
+      "pred": "small_talk",
+      "raw": "I"
+    },
+    {
+      "q": "what day's my pay coming next",
+      "gold": "work",
+      "pred": "work",
+      "raw": "H"
+    },
+    {
+      "q": "my auto tires need to be checked out so where can i get an appointment",
+      "gold": "auto_commute",
+      "pred": "auto_commute",
+      "raw": "E"
+    },
+    {
+      "q": "tell me how to go about reporting a damaged card",
+      "gold": "credit_cards",
+      "pred": "credit_cards",
+      "raw": "B"
+    },
+    {
+      "q": "what can you do to make yourself useful",
+      "gold": "small_talk",
+      "pred": "small_talk",
+      "raw": "I"
+    },
+    {
+      "q": "tell my bank's fraud department i'm going to mexico",
+      "gold": "travel",
+      "pred": "banking",
+      "raw": "A"
+    },
+    {
+      "q": "put a block on bank of amerian immediately",
+      "gold": "banking",
+      "pred": "banking",
+      "raw": "A"
+    },
+    {
+      "q": "i saw suspicious activity on my bank account",
+      "gold": "banking",
+      "pred": "banking",
+      "raw": "A"
+    },
+    {
+      "q": "i like the female voice, switch please",
+      "gold": "meta",
+      "pred": "small_talk",
+      "raw": "I"
+    },
+    {
+      "q": "how can i get a limit increase on my discover card",
+      "gold": "credit_cards",
+      "pred": "credit_cards",
+      "raw": "B"
+    },
+    {
+      "q": "will i be charged a transaction fee on my discover card in cuba",
+      "gold": "credit_cards",
+      "pred": "credit_cards",
+      "raw": "B"
+    },
+    {
+      "q": "what mpg does this car get in the city",
+      "gold": "auto_commute",
+      "pred": "auto_commute",
+      "raw": "E"
+    },
+    {
+      "q": "check my schedule for meetings today",
+      "gold": "work",
+      "pred": "work",
+      "raw": "H"
+    },
+    {
+      "q": "why is my bank account locked",
+      "gold": "banking",
+      "pred": "banking",
+      "raw": "A"
+    },
+    {
+      "q": "i'm going to need an uber for 4 people to go to patty's bar",
+      "gold": "auto_commute",
+      "pred": "auto_commute",
+      "raw": "E"
+    },
+    {
+      "q": "call to mom",
+      "gold": "utility",
+      "pred": "small_talk",
+      "raw": "I"
+    },
+    {
+      "q": "the place you were born is",
+      "gold": "small_talk",
+      "pred": "small_talk",
+      "raw": "I"
+    },
+    {
+      "q": "yes, that's right",
+      "gold": "meta",
+      "pred": "small_talk",
+      "raw": "I"
+    },
+    {
+      "q": "what's the amount of my income",
+      "gold": "work",
+      "pred": "work",
+      "raw": "H"
+    },
+    {
+      "q": "simulate rolling a dice and tell me what it lands on",
+      "gold": "utility",
+      "pred": "small_talk",
+      "raw": "I"
+    },
+    {
+      "q": "whats the mpg of this car",
+      "gold": "auto_commute",
+      "pred": "auto_commute",
+      "raw": "E"
+    },
+    {
+      "q": "have i already got eggs down on the shopping list",
+      "gold": "home",
+      "pred": "kitchen_dining",
+      "raw": "C"
+    },
+    {
+      "q": "do i have a fraudulent transaction on my account",
+      "gold": "banking",
+      "pred": "banking",
+      "raw": "A"
+    },
+    {
+      "q": "help me wake up with an alarm at 5:30am",
+      "gold": "utility",
+      "pred": "home",
+      "raw": "D"
+    },
+    {
+      "q": "today is what day of the week",
+      "gold": "utility",
+      "pred": "utility",
+      "raw": "G"
+    },
+    {
+      "q": "when's the next day off",
+      "gold": "work",
+      "pred": "work",
+      "raw": "H"
+    },
+    {
+      "q": "can you check if my credit card application has been processed",
+      "gold": "credit_cards",
+      "pred": "credit_cards",
+      "raw": "B"
+    },
+    {
+      "q": "can someone tell me why my check engine light is on",
+      "gold": "auto_commute",
+      "pred": "auto_commute",
+      "raw": "E"
+    },
+    {
+      "q": "can i put in a pto request for monday to wednesday",
+      "gold": "work",
+      "pred": "work",
+      "raw": "H"
+    },
+    {
+      "q": "do you know when i should get my tires changed next",
+      "gold": "auto_commute",
+      "pred": "auto_commute",
+      "raw": "E"
+    },
+    {
+      "q": "what is the total of my state taxes",
+      "gold": "work",
+      "pred": "work",
+      "raw": "H"
+    },
+    {
+      "q": "please set an alarm",
+      "gold": "utility",
+      "pred": "utility",
+      "raw": "G"
+    },
+    {
+      "q": "change my name to bob",
+      "gold": "meta",
+      "pred": "small_talk",
+      "raw": "I"
+    },
+    {
+      "q": "is there an uber that drives to the bank on 5th that can hold 3 people",
+      "gold": "auto_commute",
+      "pred": "auto_commute",
+      "raw": "E"
+    },
+    {
+      "q": "does sweden use the same kind of socket or do i need a converter",
+      "gold": "travel",
+      "pred": "travel",
+      "raw": "F"
+    },
+    {
+      "q": "what is 400 times 2",
+      "gold": "utility",
+      "pred": "utility",
+      "raw": "G"
+    },
+    {
+      "q": "i would like the song playing right now put on my driving playlist",
+      "gold": "home",
+      "pred": "kitchen_dining",
+      "raw": "C"
+    },
+    {
+      "q": "current weather",
+      "gold": "utility",
+      "pred": "utility",
+      "raw": "G"
+    },
+    {
+      "q": "i want a flight from new york to san francisco using delta",
+      "gold": "travel",
+      "pred": "travel",
+      "raw": "F"
+    },
+    {
+      "q": "did my vacation get approval",
+      "gold": "work",
+      "pred": "travel",
+      "raw": "F"
+    },
+    {
+      "q": "get mom on the phone",
+      "gold": "utility",
+      "pred": "small_talk",
+      "raw": "I"
+    },
+    {
+      "q": "how long can i freeze tofu before it goes bad",
+      "gold": "kitchen_dining",
+      "pred": "small_talk",
+      "raw": "I"
+    },
+    {
+      "q": "how is the traffic normally driving into downtown washington, dc, from baltimore at 4:00 pm",
+      "gold": "auto_commute",
+      "pred": "auto_commute",
+      "raw": "E"
+    },
+    {
+      "q": "is it alright to switch applesauce for oil",
+      "gold": "kitchen_dining",
+      "pred": "small_talk",
+      "raw": "I"
+    },
+    {
+      "q": "find the closest cvs near galleria mall",
+      "gold": "auto_commute",
+      "pred": "kitchen_dining",
+      "raw": "C"
+    },
+    {
+      "q": "what taxes do i owe",
+      "gold": "work",
+      "pred": "work",
+      "raw": "H"
+    },
+    {
+      "q": "do you know what song is playing on the speaker",
+      "gold": "home",
+      "pred": "small_talk",
+      "raw": "I"
+    },
+    {
+      "q": "tell me today's date",
+      "gold": "utility",
+      "pred": "utility",
+      "raw": "G"
+    },
+    {
+      "q": "i know i should pay my electric bill",
+      "gold": "banking",
+      "pred": "banking",
+      "raw": "A"
+    },
+    {
+      "q": "lets start calling you allan",
+      "gold": "small_talk",
+      "pred": "small_talk",
+      "raw": "I"
+    },
+    {
+      "q": "what does the gas meter read",
+      "gold": "auto_commute",
+      "pred": "auto_commute",
+      "raw": "E"
+    },
+    {
+      "q": "michael will reserve a table for two at 7:00pm for olive garden",
+      "gold": "kitchen_dining",
+      "pred": "kitchen_dining",
+      "raw": "C"
+    },
+    {
+      "q": "when will my payment be deposited",
+      "gold": "work",
+      "pred": "work",
+      "raw": "H"
+    },
+    {
+      "q": "for this design, what company did it",
+      "gold": "small_talk",
+      "pred": "meta",
+      "raw": "J"
+    },
+    {
+      "q": "how do i apply for a new credit card",
+      "gold": "credit_cards",
+      "pred": "credit_cards",
+      "raw": "B"
+    },
+    {
+      "q": "i didn't understand you",
+      "gold": "meta",
+      "pred": "small_talk",
+      "raw": "I"
+    },
+    {
+      "q": "what are the amount of vacation days i have",
+      "gold": "work",
+      "pred": "work",
+      "raw": "H"
+    },
+    {
+      "q": "flip a coin i choose heads",
+      "gold": "utility",
+      "pred": "small_talk",
+      "raw": "I"
+    },
+    {
+      "q": "set the ceiling fan to low",
+      "gold": "home",
+      "pred": "kitchen_dining",
+      "raw": "C"
+    },
+    {
+      "q": "i need to convert kilos to pounds",
+      "gold": "utility",
+      "pred": "small_talk",
+      "raw": "I"
+    },
+    {
+      "q": "send jack a text saying hi",
+      "gold": "utility",
+      "pred": "small_talk",
+      "raw": "I"
+    },
+    {
+      "q": "find me a recipe for chili",
+      "gold": "kitchen_dining",
+      "pred": "kitchen_dining",
+      "raw": "C"
+    },
+    {
+      "q": "how long do i need to cook chicken",
+      "gold": "kitchen_dining",
+      "pred": "kitchen_dining",
+      "raw": "C"
+    },
+    {
+      "q": "what does serendipity mean",
+      "gold": "utility",
+      "pred": "small_talk",
+      "raw": "I"
+    },
+    {
+      "q": "what's your designation",
+      "gold": "meta",
+      "pred": "small_talk",
+      "raw": "I"
+    },
+    {
+      "q": "please buy me something",
+      "gold": "home",
+      "pred": "kitchen_dining",
+      "raw": "C"
+    },
+    {
+      "q": "call sal",
+      "gold": "utility",
+      "pred": "meta",
+      "raw": "J"
+    },
+    {
+      "q": "how long will i have to wait at cheesecake factory",
+      "gold": "kitchen_dining",
+      "pred": "kitchen_dining",
+      "raw": "C"
+    },
+    {
+      "q": "when will i arrive at hy-vee",
+      "gold": "auto_commute",
+      "pred": "travel",
+      "raw": "F"
+    },
+    {
+      "q": "are the reviews for ned's good",
+      "gold": "kitchen_dining",
+      "pred": "small_talk",
+      "raw": "I"
+    },
+    {
+      "q": "hello there, good morning",
+      "gold": "small_talk",
+      "pred": "small_talk",
+      "raw": "I"
+    },
+    {
+      "q": "would you repeat what you said earlier",
+      "gold": "meta",
+      "pred": "small_talk",
+      "raw": "I"
+    },
+    {
+      "q": "can you increase my credit limit to $1000",
+      "gold": "credit_cards",
+      "pred": "credit_cards",
+      "raw": "B"
+    },
+    {
+      "q": "what is dog in spanish",
+      "gold": "travel",
+      "pred": "small_talk",
+      "raw": "I"
+    },
+    {
+      "q": "can i substitute butter for oil",
+      "gold": "kitchen_dining",
+      "pred": "small_talk",
+      "raw": "I"
+    },
+    {
+      "q": "please add this song to my country music playlist",
+      "gold": "home",
+      "pred": "kitchen_dining",
+      "raw": "C"
+    },
+    {
+      "q": "could you please inform me what health plan i am currently on",
+      "gold": "work",
+      "pred": "banking",
+      "raw": "A"
+    },
+    {
+      "q": "i could use a laugh, got any jokes",
+      "gold": "small_talk",
+      "pred": "small_talk",
+      "raw": "I"
+    },
+    {
+      "q": "what is the name of the person who made you",
+      "gold": "small_talk",
+      "pred": "small_talk",
+      "raw": "I"
+    },
+    {
+      "q": "is my routing number on my account page",
+      "gold": "banking",
+      "pred": "banking",
+      "raw": "A"
+    },
+    {
+      "q": "does my apr rate suck",
+      "gold": "credit_cards",
+      "pred": "credit_cards",
+      "raw": "B"
+    },
+    {
+      "q": "what is needed to make lasagna",
+      "gold": "kitchen_dining",
+      "pred": "kitchen_dining",
+      "raw": "C"
+    },
+    {
+      "q": "what is the gas mileage of my car",
+      "gold": "auto_commute",
+      "pred": "auto_commute",
+      "raw": "E"
+    },
+    {
+      "q": "what kind of traffic can i expect driving to newark, new jersey on i-95 from philadelphia at noon",
+      "gold": "auto_commute",
+      "pred": "auto_commute",
+      "raw": "E"
+    },
+    {
+      "q": "scan you find me a chicken recipe",
+      "gold": "kitchen_dining",
+      "pred": "kitchen_dining",
+      "raw": "C"
+    },
+    {
+      "q": "what's the word for trees in norway",
+      "gold": "travel",
+      "pred": "kitchen_dining",
+      "raw": "C"
+    },
+    {
+      "q": "how long do i have to wait to get a day off",
+      "gold": "work",
+      "pred": "work",
+      "raw": "H"
+    },
+    {
+      "q": "are you actually a person",
+      "gold": "small_talk",
+      "pred": "small_talk",
+      "raw": "I"
+    },
+    {
+      "q": "who do i contact about updating my insurance",
+      "gold": "work",
+      "pred": "work",
+      "raw": "H"
+    },
+    {
+      "q": "what's the average time to boston when riding a bus",
+      "gold": "auto_commute",
+      "pred": "auto_commute",
+      "raw": "E"
+    },
+    {
+      "q": "could you find out if my bank charges transaction fees on my american card if use internationally",
+      "gold": "credit_cards",
+      "pred": "banking",
+      "raw": "A"
+    },
+    {
+      "q": "can you book a meeting room for friday at 9:00 am",
+      "gold": "work",
+      "pred": "kitchen_dining",
+      "raw": "C"
+    },
+    {
+      "q": "many thank",
+      "gold": "small_talk",
+      "pred": "small_talk",
+      "raw": "I"
+    },
+    {
+      "q": "did the application for my visa card finish",
+      "gold": "credit_cards",
+      "pred": "credit_cards",
+      "raw": "B"
+    },
+    {
+      "q": "thanks for your help!",
+      "gold": "small_talk",
+      "pred": "small_talk",
+      "raw": "I"
+    },
+    {
+      "q": "can you please instruct me on the proper way to change the oil in my car",
+      "gold": "auto_commute",
+      "pred": "auto_commute",
+      "raw": "E"
+    },
+    {
+      "q": "delete jury duty from my calendar for may 7th",
+      "gold": "home",
+      "pred": "work",
+      "raw": "H"
+    },
+    {
+      "q": "call me shane",
+      "gold": "meta",
+      "pred": "small_talk",
+      "raw": "I"
+    },
+    {
+      "q": "how much money am i earning",
+      "gold": "work",
+      "pred": "work",
+      "raw": "H"
+    },
+    {
+      "q": "i want to know what my recent transaction was",
+      "gold": "banking",
+      "pred": "banking",
+      "raw": "A"
+    },
+    {
+      "q": "i need some suggestions for dinner places tonight",
+      "gold": "kitchen_dining",
+      "pred": "kitchen_dining",
+      "raw": "C"
+    },
+    {
+      "q": "show allison how to get to me",
+      "gold": "utility",
+      "pred": "kitchen_dining",
+      "raw": "C"
+    },
+    {
+      "q": "when is my car due for its next oil change",
+      "gold": "auto_commute",
+      "pred": "auto_commute",
+      "raw": "E"
+    },
+    {
+      "q": "use phone to call alexa",
+      "gold": "utility",
+      "pred": "small_talk",
+      "raw": "I"
+    },
+    {
+      "q": "how do i get started making homemade pizza dough",
+      "gold": "kitchen_dining",
+      "pred": "kitchen_dining",
+      "raw": "C"
+    },
+    {
+      "q": "how many vacation days are remaining on my time",
+      "gold": "work",
+      "pred": "work",
+      "raw": "H"
+    },
+    {
+      "q": "i need an uber for 5 people to go to the statue of liberty",
+      "gold": "auto_commute",
+      "pred": "auto_commute",
+      "raw": "E"
+    },
+    {
+      "q": "i need to know what traffic is going to be like at 3:00 pm on the new jersey turnpike heading into camden from north jer",
+      "gold": "auto_commute",
+      "pred": "auto_commute",
+      "raw": "E"
+    },
+    {
+      "q": "can you find me the apr listed on the statement for my citi mastercard",
+      "gold": "credit_cards",
+      "pred": "credit_cards",
+      "raw": "B"
+    },
+    {
+      "q": "does france use a socket converter",
+      "gold": "travel",
+      "pred": "kitchen_dining",
+      "raw": "C"
+    },
+    {
+      "q": "what is the current weather like",
+      "gold": "utility",
+      "pred": "utility",
+      "raw": "G"
+    },
+    {
+      "q": "am i supposed to attend any meetings today",
+      "gold": "work",
+      "pred": "work",
+      "raw": "H"
+    },
+    {
+      "q": "reset to your original settings",
+      "gold": "meta",
+      "pred": "meta",
+      "raw": "J"
+    },
+    {
+      "q": "book a car rental to miami florida today",
+      "gold": "travel",
+      "pred": "travel",
+      "raw": "F"
+    },
+    {
+      "q": "tell me how to increase credit limit for chase card",
+      "gold": "credit_cards",
+      "pred": "credit_cards",
+      "raw": "B"
+    },
+    {
+      "q": "can we move onto the next song",
+      "gold": "home",
+      "pred": "small_talk",
+      "raw": "I"
+    },
+    {
+      "q": "can i store bread in the freezer indefinitely and it will still be okay",
+      "gold": "kitchen_dining",
+      "pred": "small_talk",
+      "raw": "I"
+    },
+    {
+      "q": "check how many days off i've taken",
+      "gold": "work",
+      "pred": "work",
+      "raw": "H"
+    },
+    {
+      "q": "just toss a coin",
+      "gold": "utility",
+      "pred": "small_talk",
+      "raw": "I"
+    },
+    {
+      "q": "how long before i can eat at chic fil a",
+      "gold": "kitchen_dining",
+      "pred": "travel",
+      "raw": "F"
+    },
+    {
+      "q": "how do i sign up for a new allstatedplan",
+      "gold": "work",
+      "pred": "meta",
+      "raw": "J"
+    },
+    {
+      "q": "should i go to a car maintenance",
+      "gold": "auto_commute",
+      "pred": "auto_commute",
+      "raw": "E"
+    },
+    {
+      "q": "can i bring perfume on the plane or what is the size limit",
+      "gold": "travel",
+      "pred": "travel",
+      "raw": "F"
+    },
+    {
+      "q": "i'd like to transfer $400 from household to savings account",
+      "gold": "banking",
+      "pred": "banking",
+      "raw": "A"
+    },
+    {
+      "q": "what area did you come from",
+      "gold": "small_talk",
+      "pred": "small_talk",
+      "raw": "I"
+    },
+    {
+      "q": "what's the status of my jetblue flight",
+      "gold": "travel",
+      "pred": "travel",
+      "raw": "F"
+    },
+    {
+      "q": "can i get someone to check my check engine light",
+      "gold": "auto_commute",
+      "pred": "meta",
+      "raw": "J"
+    },
+    {
+      "q": "could you call me a different name, please",
+      "gold": "meta",
+      "pred": "small_talk",
+      "raw": "I"
+    },
+    {
+      "q": "it it possible to take pto from the 8th to the 11th",
+      "gold": "work",
+      "pred": "work",
+      "raw": "H"
+    },
+    {
+      "q": "i would like to know who your boss is",
+      "gold": "small_talk",
+      "pred": "work",
+      "raw": "H"
+    },
+    {
+      "q": "tell me where you're from",
+      "gold": "small_talk",
+      "pred": "utility",
+      "raw": "G"
+    },
+    {
+      "q": "can you tell me your birthday",
+      "gold": "small_talk",
+      "pred": "small_talk",
+      "raw": "I"
+    },
+    {
+      "q": "alexa, connect to the phone now",
+      "gold": "meta",
+      "pred": "meta",
+      "raw": "J"
+    },
+    {
+      "q": "where do we get our w2 forms",
+      "gold": "work",
+      "pred": "work",
+      "raw": "H"
+    },
+    {
+      "q": "will you remove the dinner with june on saturday the 4th at 7pm from my calendar",
+      "gold": "home",
+      "pred": "kitchen_dining",
+      "raw": "C"
+    },
+    {
+      "q": "if something is 15% off $35, how much is it",
+      "gold": "utility",
+      "pred": "utility",
+      "raw": "G"
+    },
+    {
+      "q": "what is the updated points that i earned with synovus card",
+      "gold": "credit_cards",
+      "pred": "credit_cards",
+      "raw": "B"
+    },
+    {
+      "q": "how do i share my location with kate and mike",
+      "gold": "utility",
+      "pred": "kitchen_dining",
+      "raw": "C"
+    },
+    {
+      "q": "roll those dice once",
+      "gold": "utility",
+      "pred": "small_talk",
+      "raw": "I"
+    },
+    {
+      "q": "please let lisa and chris know my location information",
+      "gold": "utility",
+      "pred": "kitchen_dining",
+      "raw": "C"
+    },
+    {
+      "q": "whisper mode, please",
+      "gold": "meta",
+      "pred": "small_talk",
+      "raw": "I"
+    },
+    {
+      "q": "make slower your speech",
+      "gold": "meta",
+      "pred": "meta",
+      "raw": "J"
+    },
+    {
+      "q": "how much moola is in my bank accounts",
+      "gold": "banking",
+      "pred": "banking",
+      "raw": "A"
+    },
+    {
+      "q": "please verify my reservation for john at bardenay",
+      "gold": "kitchen_dining",
+      "pred": "kitchen_dining",
+      "raw": "C"
+    },
+    {
+      "q": "tell me how to spent \"frightened",
+      "gold": "utility",
+      "pred": "small_talk",
+      "raw": "I"
+    },
+    {
+      "q": "it was a pleasure talking to you",
+      "gold": "small_talk",
+      "pred": "small_talk",
+      "raw": "I"
+    },
+    {
+      "q": "can you see if i have any vacation days available for a request",
+      "gold": "work",
+      "pred": "work",
+      "raw": "H"
+    },
+    {
+      "q": "please stop the current process",
+      "gold": "meta",
+      "pred": "meta",
+      "raw": "J"
+    },
+    {
+      "q": "text courtney and inform her about the detour",
+      "gold": "utility",
+      "pred": "small_talk",
+      "raw": "I"
+    },
+    {
+      "q": "what is the time in est",
+      "gold": "utility",
+      "pred": "utility",
+      "raw": "G"
+    },
+    {
+      "q": "confirm my reservation for joe at hoss's",
+      "gold": "kitchen_dining",
+      "pred": "kitchen_dining",
+      "raw": "C"
+    },
+    {
+      "q": "i need for you to get me the status of my american airlines flight",
+      "gold": "travel",
+      "pred": "travel",
+      "raw": "F"
+    },
+    {
+      "q": "do you know the total for taxes for my income",
+      "gold": "work",
+      "pred": "work",
+      "raw": "H"
+    },
+    {
+      "q": "tell me mr joes pizza average wait time",
+      "gold": "kitchen_dining",
+      "pred": "travel",
+      "raw": "F"
+    },
+    {
+      "q": "what company did this design",
+      "gold": "small_talk",
+      "pred": "meta",
+      "raw": "J"
+    },
+    {
+      "q": "milk will go bad in my fridge when",
+      "gold": "kitchen_dining",
+      "pred": "kitchen_dining",
+      "raw": "C"
+    },
+    {
+      "q": "tell me my car's tire pressure",
+      "gold": "auto_commute",
+      "pred": "auto_commute",
+      "raw": "E"
+    },
+    {
+      "q": "your speech slower it",
+      "gold": "meta",
+      "pred": "meta",
+      "raw": "J"
+    },
+    {
+      "q": "order me some doritos, please",
+      "gold": "home",
+      "pred": "kitchen_dining",
+      "raw": "C"
+    },
+    {
+      "q": "for my savings account i would like to know the interest rate",
+      "gold": "banking",
+      "pred": "banking",
+      "raw": "A"
+    },
+    {
+      "q": "check how much i spent this week",
+      "gold": "banking",
+      "pred": "banking",
+      "raw": "A"
+    },
+    {
+      "q": "my list of reminders contains what",
+      "gold": "home",
+      "pred": "home",
+      "raw": "D"
+    },
+    {
+      "q": "what's on my to-buy list",
+      "gold": "home",
+      "pred": "home",
+      "raw": "D"
+    },
+    {
+      "q": "what is the proper cooking time for this",
+      "gold": "kitchen_dining",
+      "pred": "kitchen_dining",
+      "raw": "C"
+    },
+    {
+      "q": "add eggs to my shopping list if it's not already there",
+      "gold": "home",
+      "pred": "kitchen_dining",
+      "raw": "C"
+    },
+    {
+      "q": "how do i set up a direct deposit",
+      "gold": "work",
+      "pred": "work",
+      "raw": "H"
+    },
+    {
+      "q": "confirm the john reservation at applebee's",
+      "gold": "kitchen_dining",
+      "pred": "kitchen_dining",
+      "raw": "C"
+    },
+    {
+      "q": "how long will it takes to get a new credit card",
+      "gold": "credit_cards",
+      "pred": "credit_cards",
+      "raw": "B"
+    },
+    {
+      "q": "what kind of traffic can i expect at 9:00 on the route to detroit",
+      "gold": "auto_commute",
+      "pred": "auto_commute",
+      "raw": "E"
+    },
+    {
+      "q": "would you let me know what the meaning is life is",
+      "gold": "small_talk",
+      "pred": "small_talk",
+      "raw": "I"
+    },
+    {
+      "q": "will you tell me my bank balance",
+      "gold": "banking",
+      "pred": "banking",
+      "raw": "A"
+    },
+    {
+      "q": "can you disconnect yourself from my phone",
+      "gold": "meta",
+      "pred": "meta",
+      "raw": "J"
+    },
+    {
+      "q": "when should i get my oil changed",
+      "gold": "auto_commute",
+      "pred": "auto_commute",
+      "raw": "E"
+    },
+    {
+      "q": "if i wanted to spend the lowest for my electric bill, then how much would it be",
+      "gold": "banking",
+      "pred": "banking",
+      "raw": "A"
+    },
+    {
+      "q": "clear my calendar for may 3rd",
+      "gold": "home",
+      "pred": "home",
+      "raw": "D"
+    },
+    {
+      "q": "can you play the song that goes like, \"starships were meant to fly",
+      "gold": "home",
+      "pred": "small_talk",
+      "raw": "I"
+    },
+    {
+      "q": "i need to know the answer to 10000 multiplied by 44",
+      "gold": "utility",
+      "pred": "utility",
+      "raw": "G"
+    },
+    {
+      "q": "what am i paying in taxes",
+      "gold": "work",
+      "pred": "work",
+      "raw": "H"
+    },
+    {
+      "q": "what's the status of by delta flight",
+      "gold": "travel",
+      "pred": "travel",
+      "raw": "F"
+    },
+    {
+      "q": "what is the miles per gallon",
+      "gold": "auto_commute",
+      "pred": "auto_commute",
+      "raw": "E"
+    },
+    {
+      "q": "i think this transaction is bogus",
+      "gold": "banking",
+      "pred": "meta",
+      "raw": "J"
+    },
+    {
+      "q": "how do i say bathroom in italian",
+      "gold": "travel",
+      "pred": "small_talk",
+      "raw": "I"
+    },
+    {
+      "q": "i want a hotel with good review in honolulu, can you find one",
+      "gold": "travel",
+      "pred": "travel",
+      "raw": "F"
+    },
+    {
+      "q": "computer, call alexa",
+      "gold": "utility",
+      "pred": "small_talk",
+      "raw": "I"
+    },
+    {
+      "q": "i need you to talk to me about your hobbies",
+      "gold": "small_talk",
+      "pred": "small_talk",
+      "raw": "I"
+    },
+    {
+      "q": "when is my electricity due date",
+      "gold": "banking",
+      "pred": "travel",
+      "raw": "F"
+    },
+    {
+      "q": "what day am i on on vacation and how much do i got left",
+      "gold": "work",
+      "pred": "meta",
+      "raw": "J"
+    },
+    {
+      "q": "remove wrestlemania from my calendar for may 7th",
+      "gold": "home",
+      "pred": "kitchen_dining",
+      "raw": "C"
+    },
+    {
+      "q": "i'm afraid my luggage has gone missing",
+      "gold": "travel",
+      "pred": "travel",
+      "raw": "F"
+    },
+    {
+      "q": "double the speaking speed please",
+      "gold": "meta",
+      "pred": "small_talk",
+      "raw": "I"
+    },
+    {
+      "q": "i need my routing number for my checking account at bb&t bank",
+      "gold": "banking",
+      "pred": "banking",
+      "raw": "A"
+    },
+    {
+      "q": "tell me the date 5 days from now",
+      "gold": "utility",
+      "pred": "utility",
+      "raw": "G"
+    },
+    {
+      "q": "when will i know if my visa card application was approved",
+      "gold": "credit_cards",
+      "pred": "travel",
+      "raw": "F"
+    },
+    {
+      "q": "could i get some more checkbooks sent to me",
+      "gold": "banking",
+      "pred": "banking",
+      "raw": "A"
+    },
+    {
+      "q": "would you let me know the status of my american airlines flight",
+      "gold": "travel",
+      "pred": "travel",
+      "raw": "F"
+    },
+    {
+      "q": "are the electric plugs the same over in that country",
+      "gold": "travel",
+      "pred": "kitchen_dining",
+      "raw": "C"
+    },
+    {
+      "q": "can you tell me the credit card application status",
+      "gold": "credit_cards",
+      "pred": "credit_cards",
+      "raw": "B"
+    },
+    {
+      "q": "when will i received a replacement card",
+      "gold": "credit_cards",
+      "pred": "credit_cards",
+      "raw": "B"
+    },
+    {
+      "q": "how do i use my card reward points for my next flight",
+      "gold": "credit_cards",
+      "pred": "credit_cards",
+      "raw": "B"
+    },
+    {
+      "q": "i am not in need of my reservation anymore",
+      "gold": "kitchen_dining",
+      "pred": "kitchen_dining",
+      "raw": "C"
+    },
+    {
+      "q": "how much money do i make",
+      "gold": "work",
+      "pred": "work",
+      "raw": "H"
+    },
+    {
+      "q": "it appears my luggage is lost",
+      "gold": "travel",
+      "pred": "travel",
+      "raw": "F"
+    },
+    {
+      "q": "can you please let me know the status of my capital one application",
+      "gold": "credit_cards",
+      "pred": "banking",
+      "raw": "A"
+    },
+    {
+      "q": "can you share something funny about traveling",
+      "gold": "small_talk",
+      "pred": "small_talk",
+      "raw": "I"
+    },
+    {
+      "q": "tell me what types of questions i can ask you",
+      "gold": "small_talk",
+      "pred": "small_talk",
+      "raw": "I"
+    },
+    {
+      "q": "i would like to hear the reminders that i listed on my things to remember list, please",
+      "gold": "home",
+      "pred": "small_talk",
+      "raw": "I"
+    },
+    {
+      "q": "please go ahead and change my name",
+      "gold": "meta",
+      "pred": "meta",
+      "raw": "J"
+    },
+    {
+      "q": "ai answer my questions with my name first which is deb",
+      "gold": "meta",
+      "pred": "small_talk",
+      "raw": "I"
+    },
+    {
+      "q": "i want you paired to my phone",
+      "gold": "meta",
+      "pred": "meta",
+      "raw": "J"
+    },
+    {
+      "q": "what's the minimum payment",
+      "gold": "banking",
+      "pred": "banking",
+      "raw": "A"
+    },
+    {
+      "q": "denver's timezone is a mystery, i wonder where its located",
+      "gold": "travel",
+      "pred": "travel",
+      "raw": "F"
+    },
+    {
+      "q": "what is the expiration date for honey",
+      "gold": "kitchen_dining",
+      "pred": "utility",
+      "raw": "G"
+    },
+    {
+      "q": "what's something interesting about bees",
+      "gold": "small_talk",
+      "pred": "small_talk",
+      "raw": "I"
+    },
+    {
+      "q": "i am not sure",
+      "gold": "meta",
+      "pred": "small_talk",
+      "raw": "I"
+    },
+    {
+      "q": "is vaccination necessary for travel to asia",
+      "gold": "travel",
+      "pred": "travel",
+      "raw": "F"
+    },
+    {
+      "q": "i would like to jump start my car",
+      "gold": "auto_commute",
+      "pred": "auto_commute",
+      "raw": "E"
+    },
+    {
+      "q": "how do i know when to get the tires changed on my car",
+      "gold": "auto_commute",
+      "pred": "auto_commute",
+      "raw": "E"
+    },
+    {
+      "q": "will peas work instead of carrots",
+      "gold": "kitchen_dining",
+      "pred": "kitchen_dining",
+      "raw": "C"
+    },
+    {
+      "q": "what's the nutrition info for a cucumber",
+      "gold": "kitchen_dining",
+      "pred": "kitchen_dining",
+      "raw": "C"
+    },
+    {
+      "q": "is a socket converter necessary if i'm travelling to london",
+      "gold": "travel",
+      "pred": "travel",
+      "raw": "F"
+    },
+    {
+      "q": "i apprecaite the help from you",
+      "gold": "small_talk",
+      "pred": "small_talk",
+      "raw": "I"
+    },
+    {
+      "q": "call alexa at home",
+      "gold": "utility",
+      "pred": "home",
+      "raw": "D"
+    },
+    {
+      "q": "tell me the weather",
+      "gold": "utility",
+      "pred": "utility",
+      "raw": "G"
+    },
+    {
+      "q": "pull up some recommendations for places serving fish in maine",
+      "gold": "kitchen_dining",
+      "pred": "kitchen_dining",
+      "raw": "C"
+    },
+    {
+      "q": "where would the routing number for first utah be located",
+      "gold": "banking",
+      "pred": "banking",
+      "raw": "A"
+    },
+    {
+      "q": "what do you like to do besides work",
+      "gold": "small_talk",
+      "pred": "small_talk",
+      "raw": "I"
+    },
+    {
+      "q": "when is my car due for an tire change",
+      "gold": "auto_commute",
+      "pred": "auto_commute",
+      "raw": "E"
+    },
+    {
+      "q": "a hidden government facility",
+      "gold": "small_talk",
+      "pred": "meta",
+      "raw": "J"
+    },
+    {
+      "q": "please begin a timer",
+      "gold": "utility",
+      "pred": "utility",
+      "raw": "G"
+    },
+    {
+      "q": "book me a flight to dallas from st, paul, minnesota on delta airlines",
+      "gold": "travel",
+      "pred": "travel",
+      "raw": "F"
+    },
+    {
+      "q": "please put my account on hold",
+      "gold": "banking",
+      "pred": "banking",
+      "raw": "A"
+    },
+    {
+      "q": "tack on a gallon of milk to the grocery list",
+      "gold": "home",
+      "pred": "kitchen_dining",
+      "raw": "C"
+    },
+    {
+      "q": "can you place an order for the olive oil i just finished",
+      "gold": "home",
+      "pred": "kitchen_dining",
+      "raw": "C"
+    },
+    {
+      "q": "what is the square root of 95",
+      "gold": "utility",
+      "pred": "utility",
+      "raw": "G"
+    },
+    {
+      "q": "heard any good jokes",
+      "gold": "small_talk",
+      "pred": "small_talk",
+      "raw": "I"
+    },
+    {
+      "q": "i would like to check my rewards for my credit card",
+      "gold": "credit_cards",
+      "pred": "credit_cards",
+      "raw": "B"
+    },
+    {
+      "q": "i would like to change the name on my capital one account",
+      "gold": "banking",
+      "pred": "banking",
+      "raw": "A"
+    },
+    {
+      "q": "change name for me",
+      "gold": "meta",
+      "pred": "small_talk",
+      "raw": "I"
+    },
+    {
+      "q": "can you roll an eight sided die and tell me what it comes up as",
+      "gold": "utility",
+      "pred": "small_talk",
+      "raw": "I"
+    },
+    {
+      "q": "what day did i last have the oil in my car changed",
+      "gold": "auto_commute",
+      "pred": "auto_commute",
+      "raw": "E"
+    },
+    {
+      "q": "tell me when my water bill is due",
+      "gold": "banking",
+      "pred": "travel",
+      "raw": "F"
+    },
+    {
+      "q": "can you please say that again",
+      "gold": "meta",
+      "pred": "meta",
+      "raw": "J"
+    },
+    {
+      "q": "restart your actions with the original settings you came with",
+      "gold": "meta",
+      "pred": "meta",
+      "raw": "J"
+    },
+    {
+      "q": "can you overnight me a few checkbooks",
+      "gold": "banking",
+      "pred": "banking",
+      "raw": "A"
+    },
+    {
+      "q": "do you have friendly or unfriendly pets",
+      "gold": "small_talk",
+      "pred": "small_talk",
+      "raw": "I"
+    },
+    {
+      "q": "search for a chili recipe for me",
+      "gold": "kitchen_dining",
+      "pred": "kitchen_dining",
+      "raw": "C"
+    },
+    {
+      "q": "set a 1 minute timer",
+      "gold": "utility",
+      "pred": "utility",
+      "raw": "G"
+    },
+    {
+      "q": "what is the routing number for pnc",
+      "gold": "banking",
+      "pred": "banking",
+      "raw": "A"
+    },
+    {
+      "q": "help me to transfer my 401k",
+      "gold": "work",
+      "pred": "banking",
+      "raw": "A"
+    },
+    {
+      "q": "how many points earned do i have with my american express card",
+      "gold": "credit_cards",
+      "pred": "credit_cards",
+      "raw": "B"
+    },
+    {
+      "q": "what did i tell you to call me",
+      "gold": "meta",
+      "pred": "small_talk",
+      "raw": "I"
+    },
+    {
+      "q": "who assembled you",
+      "gold": "small_talk",
+      "pred": "small_talk",
+      "raw": "I"
+    },
+    {
+      "q": "tell me what's on my todo list",
+      "gold": "home",
+      "pred": "home",
+      "raw": "D"
+    },
+    {
+      "q": "help me get my w-2 form",
+      "gold": "work",
+      "pred": "work",
+      "raw": "H"
+    },
+    {
+      "q": "get a uber for two to go to a romantic dinner at mcdonalds",
+      "gold": "auto_commute",
+      "pred": "auto_commute",
+      "raw": "E"
+    },
+    {
+      "q": "can applebees take reservations",
+      "gold": "kitchen_dining",
+      "pred": "kitchen_dining",
+      "raw": "C"
+    },
+    {
+      "q": "find the nutrition info for cheese fries for me",
+      "gold": "kitchen_dining",
+      "pred": "kitchen_dining",
+      "raw": "C"
+    },
+    {
+      "q": "i need to call my coworker",
+      "gold": "utility",
+      "pred": "small_talk",
+      "raw": "I"
+    },
+    {
+      "q": "i would like to hear something funny",
+      "gold": "small_talk",
+      "pred": "small_talk",
+      "raw": "I"
+    },
+    {
+      "q": "can you tell me how long it will take to cook a lasagna",
+      "gold": "kitchen_dining",
+      "pred": "kitchen_dining",
+      "raw": "C"
+    },
+    {
+      "q": "when will the replaecment card arrive",
+      "gold": "credit_cards",
+      "pred": "credit_cards",
+      "raw": "B"
+    },
+    {
+      "q": "is there enough in my wells fargo account to buy some nike's",
+      "gold": "banking",
+      "pred": "banking",
+      "raw": "A"
+    },
+    {
+      "q": "i want you to change to the male voice",
+      "gold": "meta",
+      "pred": "meta",
+      "raw": "J"
+    },
+    {
+      "q": "can you tell me the date of my last check",
+      "gold": "work",
+      "pred": "banking",
+      "raw": "A"
+    },
+    {
+      "q": "what's the spanish word for dog",
+      "gold": "travel",
+      "pred": "small_talk",
+      "raw": "I"
+    },
+    {
+      "q": "what is my visa credit limit",
+      "gold": "credit_cards",
+      "pred": "credit_cards",
+      "raw": "B"
+    },
+    {
+      "q": "i need a list of good places to eat near me",
+      "gold": "kitchen_dining",
+      "pred": "kitchen_dining",
+      "raw": "C"
+    },
+    {
+      "q": "is it possible to use starch instead of flour",
+      "gold": "kitchen_dining",
+      "pred": "small_talk",
+      "raw": "I"
+    },
+    {
+      "q": "and your name is",
+      "gold": "small_talk",
+      "pred": "small_talk",
+      "raw": "I"
+    },
+    {
+      "q": "where is the closest hospital to madison square garden",
+      "gold": "auto_commute",
+      "pred": "travel",
+      "raw": "F"
+    },
+    {
+      "q": "set a timer for 10 minutes",
+      "gold": "utility",
+      "pred": "utility",
+      "raw": "G"
+    },
+    {
+      "q": "can you add eggs to my shopping list",
+      "gold": "home",
+      "pred": "kitchen_dining",
+      "raw": "C"
+    },
+    {
+      "q": "i want to know my credit rating",
+      "gold": "credit_cards",
+      "pred": "credit_cards",
+      "raw": "B"
+    },
+    {
+      "q": "where do i go to order more checks for my well's fargo account",
+      "gold": "banking",
+      "pred": "banking",
+      "raw": "A"
+    },
+    {
+      "q": "i have a revolving store card and defaulted so will my fico score be affected",
+      "gold": "credit_cards",
+      "pred": "credit_cards",
+      "raw": "B"
+    },
+    {
+      "q": "what day did i last take my car in",
+      "gold": "auto_commute",
+      "pred": "auto_commute",
+      "raw": "E"
+    },
+    {
+      "q": "give me my credit score please",
+      "gold": "credit_cards",
+      "pred": "credit_cards",
+      "raw": "B"
+    },
+    {
+      "q": "can you tell me the correct spelling of liaison",
+      "gold": "utility",
+      "pred": "utility",
+      "raw": "G"
+    },
+    {
+      "q": "show my my most recent visa card transaction",
+      "gold": "banking",
+      "pred": "travel",
+      "raw": "F"
+    },
+    {
+      "q": "i want to use spanish with you",
+      "gold": "meta",
+      "pred": "small_talk",
+      "raw": "I"
+    },
+    {
+      "q": "what fuel should i use for this car",
+      "gold": "auto_commute",
+      "pred": "auto_commute",
+      "raw": "E"
+    },
+    {
+      "q": "is there a fee to use my card in france",
+      "gold": "credit_cards",
+      "pred": "credit_cards",
+      "raw": "B"
+    },
+    {
+      "q": "i wanna hear something cool about bees",
+      "gold": "small_talk",
+      "pred": "small_talk",
+      "raw": "I"
+    },
+    {
+      "q": "check to see why us bank placed a hold on my account",
+      "gold": "banking",
+      "pred": "banking",
+      "raw": "A"
+    },
+    {
+      "q": "i need an uber to get to the bank",
+      "gold": "auto_commute",
+      "pred": "auto_commute",
+      "raw": "E"
+    },
+    {
+      "q": "how many minutes are involved in the preparation of curry",
+      "gold": "kitchen_dining",
+      "pred": "kitchen_dining",
+      "raw": "C"
+    },
+    {
+      "q": "can you tell me how to transfer my 401k",
+      "gold": "work",
+      "pred": "banking",
+      "raw": "A"
+    },
+    {
+      "q": "that will be all have a nice day!",
+      "gold": "small_talk",
+      "pred": "small_talk",
+      "raw": "I"
+    },
+    {
+      "q": "what would be the best way to deal with lost luggage",
+      "gold": "travel",
+      "pred": "travel",
+      "raw": "F"
+    },
+    {
+      "q": "i don't want you connected to my phone anymore",
+      "gold": "meta",
+      "pred": "meta",
+      "raw": "J"
+    },
+    {
+      "q": "what is the highway mpg on this car like",
+      "gold": "auto_commute",
+      "pred": "auto_commute",
+      "raw": "E"
+    },
+    {
+      "q": "what sort of health benefits do i have",
+      "gold": "work",
+      "pred": "small_talk",
+      "raw": "I"
+    },
+    {
+      "q": "can you cancel that",
+      "gold": "meta",
+      "pred": "meta",
+      "raw": "J"
+    },
+    {
+      "q": "my phone isn't where i left it",
+      "gold": "utility",
+      "pred": "kitchen_dining",
+      "raw": "C"
+    },
+    {
+      "q": "tell me what health plan coverage i have",
+      "gold": "work",
+      "pred": "work",
+      "raw": "H"
+    },
+    {
+      "q": "who employs you",
+      "gold": "small_talk",
+      "pred": "small_talk",
+      "raw": "I"
+    },
+    {
+      "q": "you can stop talking ai",
+      "gold": "meta",
+      "pred": "small_talk",
+      "raw": "I"
+    },
+    {
+      "q": "what is the most time i can keep a burrito frozen for before it's no good to eat",
+      "gold": "kitchen_dining",
+      "pred": "small_talk",
+      "raw": "I"
+    },
+    {
+      "q": "sorry, i didn't catch that could you say it again",
+      "gold": "meta",
+      "pred": "small_talk",
+      "raw": "I"
+    },
+    {
+      "q": "what was the company that designed you",
+      "gold": "small_talk",
+      "pred": "small_talk",
+      "raw": "I"
+    },
+    {
+      "q": "i need to know how many pounds are in 10 kilos",
+      "gold": "utility",
+      "pred": "utility",
+      "raw": "G"
+    },
+    {
+      "q": "tell me today's fun fact",
+      "gold": "small_talk",
+      "pred": "small_talk",
+      "raw": "I"
+    },
+    {
+      "q": "what are my bills this month",
+      "gold": "banking",
+      "pred": "banking",
+      "raw": "A"
+    },
+    {
+      "q": "i need to know the the carry-on restrictions for american airlines",
+      "gold": "travel",
+      "pred": "travel",
+      "raw": "F"
+    },
+    {
+      "q": "how high is the apr on my credit card",
+      "gold": "credit_cards",
+      "pred": "credit_cards",
+      "raw": "B"
+    },
+    {
+      "q": "i want to a book a roundtrip flight from san antonio to dtw departing on friday and returning on wednesday",
+      "gold": "travel",
+      "pred": "travel",
+      "raw": "F"
+    },
+    {
+      "q": "can you make 1234 the pin for my savings account",
+      "gold": "banking",
+      "pred": "banking",
+      "raw": "A"
+    },
+    {
+      "q": "i need a meeting room between 3-7, are any available",
+      "gold": "work",
+      "pred": "kitchen_dining",
+      "raw": "C"
+    },
+    {
+      "q": "what is the next date for which i can get an oil change appointment",
+      "gold": "auto_commute",
+      "pred": "auto_commute",
+      "raw": "E"
+    },
+    {
+      "q": "what is the carry-on policy for flights on american airlines",
+      "gold": "travel",
+      "pred": "travel",
+      "raw": "F"
+    },
+    {
+      "q": "do you know my phone's location",
+      "gold": "utility",
+      "pred": "utility",
+      "raw": "G"
+    },
+    {
+      "q": "my tires need how much more air in them",
+      "gold": "auto_commute",
+      "pred": "auto_commute",
+      "raw": "E"
+    },
+    {
+      "q": "need to know the weather now",
+      "gold": "utility",
+      "pred": "utility",
+      "raw": "G"
+    },
+    {
+      "q": "turn down the volume",
+      "gold": "meta",
+      "pred": "utility",
+      "raw": "G"
+    },
+    {
+      "q": "where can i get my w2",
+      "gold": "work",
+      "pred": "work",
+      "raw": "H"
+    },
+    {
+      "q": "i want to be called timothy",
+      "gold": "meta",
+      "pred": "small_talk",
+      "raw": "I"
+    },
+    {
+      "q": "what do i do if i need my w2 for my my taxes",
+      "gold": "work",
+      "pred": "work",
+      "raw": "H"
+    },
+    {
+      "q": "alter the pin on my savings account to be 1234",
+      "gold": "banking",
+      "pred": "banking",
+      "raw": "A"
+    },
+    {
+      "q": "what do you think about changing your name to heath",
+      "gold": "small_talk",
+      "pred": "small_talk",
+      "raw": "I"
+    },
+    {
+      "q": "whats the total of my taxes",
+      "gold": "work",
+      "pred": "work",
+      "raw": "H"
+    },
+    {
+      "q": "do i control you",
+      "gold": "small_talk",
+      "pred": "small_talk",
+      "raw": "I"
+    },
+    {
+      "q": "is it safe in italy",
+      "gold": "travel",
+      "pred": "travel",
+      "raw": "F"
+    },
+    {
+      "q": "what name do you have for me",
+      "gold": "meta",
+      "pred": "small_talk",
+      "raw": "I"
+    },
+    {
+      "q": "can i use mayo instead of miracle whip",
+      "gold": "kitchen_dining",
+      "pred": "small_talk",
+      "raw": "I"
+    },
+    {
+      "q": "i want to know what health plan i'm currently on",
+      "gold": "work",
+      "pred": "work",
+      "raw": "H"
+    },
+    {
+      "q": "can you call alexa",
+      "gold": "utility",
+      "pred": "small_talk",
+      "raw": "I"
+    },
+    {
+      "q": "give me a fun fact about komodo dragon",
+      "gold": "small_talk",
+      "pred": "small_talk",
+      "raw": "I"
+    },
+    {
+      "q": "what company were you designed by",
+      "gold": "small_talk",
+      "pred": "meta",
+      "raw": "J"
+    },
+    {
+      "q": "hello there",
+      "gold": "small_talk",
+      "pred": "small_talk",
+      "raw": "I"
+    },
+    {
+      "q": "tell me where my order is",
+      "gold": "home",
+      "pred": "home",
+      "raw": "D"
+    },
+    {
+      "q": "change back to the factory set up",
+      "gold": "meta",
+      "pred": "meta",
+      "raw": "J"
+    },
+    {
+      "q": "start responding to joe",
+      "gold": "small_talk",
+      "pred": "small_talk",
+      "raw": "I"
+    },
+    {
+      "q": "i need to know the name that you have for me",
+      "gold": "meta",
+      "pred": "small_talk",
+      "raw": "I"
+    },
+    {
+      "q": "turn on the microwave for 3 minutes",
+      "gold": "home",
+      "pred": "kitchen_dining",
+      "raw": "C"
+    },
+    {
+      "q": "change speaking speed to 50 percent faster",
+      "gold": "meta",
+      "pred": "meta",
+      "raw": "J"
+    },
+    {
+      "q": "set up a new reminder to alert me when it's time to put the trash out",
+      "gold": "home",
+      "pred": "kitchen_dining",
+      "raw": "C"
+    },
+    {
+      "q": "what's the date on my last pay stub",
+      "gold": "work",
+      "pred": "work",
+      "raw": "H"
+    },
+    {
+      "q": "now reset your factory settings",
+      "gold": "meta",
+      "pred": "meta",
+      "raw": "J"
+    },
+    {
+      "q": "how do i say i'm sorry in chinese",
+      "gold": "travel",
+      "pred": "small_talk",
+      "raw": "I"
+    },
+    {
+      "q": "i need to rent a car for may 11thto may 13th in chicago and i'd like a coupe",
+      "gold": "travel",
+      "pred": "meta",
+      "raw": "J"
+    },
+    {
+      "q": "i need to know traffic patterns heading to the george washington bridge from manhattan",
+      "gold": "auto_commute",
+      "pred": "auto_commute",
+      "raw": "E"
+    },
+    {
+      "q": "that is most definitely false",
+      "gold": "meta",
+      "pred": "meta",
+      "raw": "J"
+    },
+    {
+      "q": "will using a discover card in rome cause transaction fees",
+      "gold": "credit_cards",
+      "pred": "credit_cards",
+      "raw": "B"
+    },
+    {
+      "q": "can you spell out \"wonderful",
+      "gold": "utility",
+      "pred": "utility",
+      "raw": "G"
+    },
+    {
+      "q": "where are you from originally",
+      "gold": "small_talk",
+      "pred": "small_talk",
+      "raw": "I"
+    },
+    {
+      "q": "i want to know who your boss is",
+      "gold": "small_talk",
+      "pred": "work",
+      "raw": "H"
+    },
+    {
+      "q": "do i need a converter for my electronics when i go to that coutntry",
+      "gold": "travel",
+      "pred": "travel",
+      "raw": "F"
+    },
+    {
+      "q": "i need to know all my spending transactions",
+      "gold": "banking",
+      "pred": "banking",
+      "raw": "A"
+    },
+    {
+      "q": "cats or dogs are your preference",
+      "gold": "small_talk",
+      "pred": "small_talk",
+      "raw": "I"
+    },
+    {
+      "q": "tell me a joke about the topic of mice",
+      "gold": "small_talk",
+      "pred": "small_talk",
+      "raw": "I"
+    },
+    {
+      "q": "what type of gas goes into the car",
+      "gold": "auto_commute",
+      "pred": "auto_commute",
+      "raw": "E"
+    },
+    {
+      "q": "go to whisper mode until this movie is over",
+      "gold": "meta",
+      "pred": "meta",
+      "raw": "J"
+    },
+    {
+      "q": "keep volume at 4 all the time",
+      "gold": "meta",
+      "pred": "utility",
+      "raw": "G"
+    },
+    {
+      "q": "what is the amount of my state taxes",
+      "gold": "work",
+      "pred": "work",
+      "raw": "H"
+    },
+    {
+      "q": "what rating do the critics give the french laundry",
+      "gold": "kitchen_dining",
+      "pred": "travel",
+      "raw": "F"
+    },
+    {
+      "q": "what was my recent transaction on my visa card",
+      "gold": "banking",
+      "pred": "credit_cards",
+      "raw": "B"
+    },
+    {
+      "q": "i would like to know my car's tire pressure",
+      "gold": "auto_commute",
+      "pred": "auto_commute",
+      "raw": "E"
+    },
+    {
+      "q": "vaccines for my trip to cuba",
+      "gold": "travel",
+      "pred": "travel",
+      "raw": "F"
+    },
+    {
+      "q": "i don't remember buying this",
+      "gold": "banking",
+      "pred": "small_talk",
+      "raw": "I"
+    },
+    {
+      "q": "what sorts of activities should i get up to while i am in dublin",
+      "gold": "travel",
+      "pred": "kitchen_dining",
+      "raw": "C"
+    },
+    {
+      "q": "are you a pet owner what kind",
+      "gold": "small_talk",
+      "pred": "small_talk",
+      "raw": "I"
+    },
+    {
+      "q": "look up the lowest amount i can pay on my electricity bill",
+      "gold": "banking",
+      "pred": "travel",
+      "raw": "F"
+    },
+    {
+      "q": "why was my card got declined when i am trying to pay for dinner when i am in vietnam",
+      "gold": "credit_cards",
+      "pred": "credit_cards",
+      "raw": "B"
+    },
+    {
+      "q": "how do you say fast in spanish",
+      "gold": "travel",
+      "pred": "small_talk",
+      "raw": "I"
+    },
+    {
+      "q": "what is the total number of pets that you have",
+      "gold": "small_talk",
+      "pred": "small_talk",
+      "raw": "I"
+    },
+    {
+      "q": "what is the calorie content in bananas",
+      "gold": "kitchen_dining",
+      "pred": "kitchen_dining",
+      "raw": "C"
+    },
+    {
+      "q": "can i get an uber to drive me to the movies",
+      "gold": "auto_commute",
+      "pred": "auto_commute",
+      "raw": "E"
+    },
+    {
+      "q": "what is the proper spelling of corporate",
+      "gold": "utility",
+      "pred": "utility",
+      "raw": "G"
+    },
+    {
+      "q": "how much is $30 usd in canadian dollar",
+      "gold": "travel",
+      "pred": "travel",
+      "raw": "F"
+    },
+    {
+      "q": "let me know what's on my shopping list",
+      "gold": "home",
+      "pred": "home",
+      "raw": "D"
+    },
+    {
+      "q": "ai, what is your name",
+      "gold": "small_talk",
+      "pred": "small_talk",
+      "raw": "I"
+    },
+    {
+      "q": "what is 1000 plus 745",
+      "gold": "utility",
+      "pred": "utility",
+      "raw": "G"
+    },
+    {
+      "q": "i'm going to start calling you joe",
+      "gold": "small_talk",
+      "pred": "small_talk",
+      "raw": "I"
+    },
+    {
+      "q": "i need to give my location to macy and george",
+      "gold": "utility",
+      "pred": "kitchen_dining",
+      "raw": "C"
+    },
+    {
+      "q": "yes, that happens to be correct",
+      "gold": "meta",
+      "pred": "small_talk",
+      "raw": "I"
+    },
+    {
+      "q": "how to do an oil change",
+      "gold": "auto_commute",
+      "pred": "auto_commute",
+      "raw": "E"
+    },
+    {
+      "q": "i need to know when my water bill is due",
+      "gold": "banking",
+      "pred": "travel",
+      "raw": "F"
+    },
+    {
+      "q": "when's your birthday",
+      "gold": "small_talk",
+      "pred": "small_talk",
+      "raw": "I"
+    },
+    {
+      "q": "what's my spending limit on my discover",
+      "gold": "credit_cards",
+      "pred": "credit_cards",
+      "raw": "B"
+    },
+    {
+      "q": "how much money is there in my bank accounts",
+      "gold": "banking",
+      "pred": "banking",
+      "raw": "A"
+    },
+    {
+      "q": "i no longer want you to be synced to my phone",
+      "gold": "meta",
+      "pred": "meta",
+      "raw": "J"
+    },
+    {
+      "q": "what kind of gas does your car use",
+      "gold": "auto_commute",
+      "pred": "auto_commute",
+      "raw": "E"
+    },
+    {
+      "q": "is my apr rate better than most",
+      "gold": "credit_cards",
+      "pred": "credit_cards",
+      "raw": "B"
+    },
+    {
+      "q": "what number is my credit score currently",
+      "gold": "credit_cards",
+      "pred": "credit_cards",
+      "raw": "B"
+    },
+    {
+      "q": "find my cellphone for me!",
+      "gold": "utility",
+      "pred": "meta",
+      "raw": "J"
+    },
+    {
+      "q": "when can i expect to be paid",
+      "gold": "work",
+      "pred": "work",
+      "raw": "H"
+    },
+    {
+      "q": "share location with david",
+      "gold": "utility",
+      "pred": "kitchen_dining",
+      "raw": "C"
+    },
+    {
+      "q": "from where did you originate",
+      "gold": "small_talk",
+      "pred": "small_talk",
+      "raw": "I"
+    },
+    {
+      "q": "give me examples of what some of your hobbies are",
+      "gold": "small_talk",
+      "pred": "small_talk",
+      "raw": "I"
+    },
+    {
+      "q": "if i go to indonesia would i need a visa",
+      "gold": "travel",
+      "pred": "travel",
+      "raw": "F"
+    },
+    {
+      "q": "nope that's not it",
+      "gold": "meta",
+      "pred": "small_talk",
+      "raw": "I"
+    },
+    {
+      "q": "how many centimeters are in 12 meters",
+      "gold": "utility",
+      "pred": "utility",
+      "raw": "G"
+    },
+    {
+      "q": "how much gas do i have in my tank",
+      "gold": "auto_commute",
+      "pred": "auto_commute",
+      "raw": "E"
+    },
+    {
+      "q": "what taxes will i owe from my income",
+      "gold": "work",
+      "pred": "work",
+      "raw": "H"
+    },
+    {
+      "q": "can you roll a four sided die and tell me the result",
+      "gold": "utility",
+      "pred": "small_talk",
+      "raw": "I"
+    },
+    {
+      "q": "is my credit score over 700 yet",
+      "gold": "credit_cards",
+      "pred": "credit_cards",
+      "raw": "B"
+    },
+    {
+      "q": "transfer seventeen dollars from rbs to woodforest account, please",
+      "gold": "banking",
+      "pred": "banking",
+      "raw": "A"
+    },
+    {
+      "q": "who is the one that made you",
+      "gold": "small_talk",
+      "pred": "small_talk",
+      "raw": "I"
+    },
+    {
+      "q": "how do i get to the train by foot",
+      "gold": "auto_commute",
+      "pred": "auto_commute",
+      "raw": "E"
+    },
+    {
+      "q": "what is the date of tomorrow",
+      "gold": "utility",
+      "pred": "utility",
+      "raw": "G"
+    },
+    {
+      "q": "which insurance plan to i have",
+      "gold": "work",
+      "pred": "work",
+      "raw": "H"
+    },
+    {
+      "q": "book me a car rental in wichita",
+      "gold": "travel",
+      "pred": "travel",
+      "raw": "F"
+    },
+    {
+      "q": "what does my shopping list contain",
+      "gold": "home",
+      "pred": "home",
+      "raw": "D"
+    },
+    {
+      "q": "time to replace my credit card",
+      "gold": "credit_cards",
+      "pred": "credit_cards",
+      "raw": "B"
+    },
+    {
+      "q": "how long does pizza take",
+      "gold": "kitchen_dining",
+      "pred": "kitchen_dining",
+      "raw": "C"
+    },
+    {
+      "q": "next song, please!",
+      "gold": "home",
+      "pred": "small_talk",
+      "raw": "I"
+    },
+    {
+      "q": "what kind of things to you like to outside of work",
+      "gold": "small_talk",
+      "pred": "small_talk",
+      "raw": "I"
+    },
+    {
+      "q": "i really need to check my rewards for my credit card",
+      "gold": "credit_cards",
+      "pred": "credit_cards",
+      "raw": "B"
+    },
+    {
+      "q": "i need to know what's on my shopping list",
+      "gold": "home",
+      "pred": "home",
+      "raw": "D"
+    },
+    {
+      "q": "how much money do i earn",
+      "gold": "work",
+      "pred": "work",
+      "raw": "H"
+    },
+    {
+      "q": "how do i know if it is time to replace my tires",
+      "gold": "auto_commute",
+      "pred": "auto_commute",
+      "raw": "E"
+    },
+    {
+      "q": "what name do you want me to use",
+      "gold": "small_talk",
+      "pred": "small_talk",
+      "raw": "I"
+    },
+    {
+      "q": "cancel my reservation for dinner this saturday",
+      "gold": "kitchen_dining",
+      "pred": "kitchen_dining",
+      "raw": "C"
+    },
+    {
+      "q": "where is the nearest k mart",
+      "gold": "auto_commute",
+      "pred": "kitchen_dining",
+      "raw": "C"
+    },
+    {
+      "q": "what do i need to do to set up direct deposit",
+      "gold": "work",
+      "pred": "work",
+      "raw": "H"
+    },
+    {
+      "q": "would you mind repeating that",
+      "gold": "meta",
+      "pred": "small_talk",
+      "raw": "I"
+    },
+    {
+      "q": "tell david my location",
+      "gold": "utility",
+      "pred": "kitchen_dining",
+      "raw": "C"
+    },
+    {
+      "q": "what does my checking account at chase earn in interest",
+      "gold": "banking",
+      "pred": "banking",
+      "raw": "A"
+    },
+    {
+      "q": "how do i report that i actually lost my card",
+      "gold": "credit_cards",
+      "pred": "credit_cards",
+      "raw": "B"
+    },
+    {
+      "q": "how many days later is it okay to eat curry that was in the fridge",
+      "gold": "kitchen_dining",
+      "pred": "small_talk",
+      "raw": "I"
+    },
+    {
+      "q": "switch voice option to female",
+      "gold": "meta",
+      "pred": "small_talk",
+      "raw": "I"
+    },
+    {
+      "q": "i'm almost certain my car battery died, please tell me what to do",
+      "gold": "auto_commute",
+      "pred": "auto_commute",
+      "raw": "E"
+    },
+    {
+      "q": "erase meeting with jeff from my calendar",
+      "gold": "home",
+      "pred": "work",
+      "raw": "H"
+    },
+    {
+      "q": "thanks for all your help",
+      "gold": "small_talk",
+      "pred": "small_talk",
+      "raw": "I"
+    },
+    {
+      "q": "can you see if paying garbage bill is on my todo list for this week",
+      "gold": "home",
+      "pred": "kitchen_dining",
+      "raw": "C"
+    },
+    {
+      "q": "what's your name",
+      "gold": "small_talk",
+      "pred": "small_talk",
+      "raw": "I"
+    },
+    {
+      "q": "i want to know what type of things you can help me with",
+      "gold": "small_talk",
+      "pred": "small_talk",
+      "raw": "I"
+    },
+    {
+      "q": "number of calories in coke",
+      "gold": "kitchen_dining",
+      "pred": "kitchen_dining",
+      "raw": "C"
+    },
+    {
+      "q": "i want my phone to be disconnected from you",
+      "gold": "meta",
+      "pred": "meta",
+      "raw": "J"
+    },
+    {
+      "q": "what things are on my todo list",
+      "gold": "home",
+      "pred": "home",
+      "raw": "D"
+    },
+    {
+      "q": "look up how high my visa limit is",
+      "gold": "credit_cards",
+      "pred": "travel",
+      "raw": "F"
+    },
+    {
+      "q": "what is the usd mxn exchange rate",
+      "gold": "travel",
+      "pred": "travel",
+      "raw": "F"
+    },
+    {
+      "q": "what does post rush hour traffic generally look like heading into the lincoln tunnel in manhattan from new jersey",
+      "gold": "auto_commute",
+      "pred": "auto_commute",
+      "raw": "E"
+    },
+    {
+      "q": "undecided",
+      "gold": "meta",
+      "pred": "small_talk",
+      "raw": "I"
+    },
+    {
+      "q": "i want to know how to go about getting a new credit card",
+      "gold": "credit_cards",
+      "pred": "credit_cards",
+      "raw": "B"
+    },
+    {
+      "q": "i'm going to be in mexico from thursday to friday, so can you let my bank know",
+      "gold": "travel",
+      "pred": "banking",
+      "raw": "A"
+    },
+    {
+      "q": "what can i use to convert from centimeters to inches",
+      "gold": "utility",
+      "pred": "small_talk",
+      "raw": "I"
+    },
+    {
+      "q": "find out if there's a new credit card that suits me",
+      "gold": "credit_cards",
+      "pred": "credit_cards",
+      "raw": "B"
+    },
+    {
+      "q": "what is 100 multiplied by 55",
+      "gold": "utility",
+      "pred": "utility",
+      "raw": "G"
+    },
+    {
+      "q": "throw a coin in the air",
+      "gold": "utility",
+      "pred": "small_talk",
+      "raw": "I"
+    },
+    {
+      "q": "is a visa necessary for traveling to south africa",
+      "gold": "travel",
+      "pred": "travel",
+      "raw": "F"
+    },
+    {
+      "q": "whisper mode must be left",
+      "gold": "meta",
+      "pred": "small_talk",
+      "raw": "I"
+    },
+    {
+      "q": "what firm do you work for",
+      "gold": "small_talk",
+      "pred": "work",
+      "raw": "H"
+    },
+    {
+      "q": "how do i order some checkbooks for my chase account",
+      "gold": "banking",
+      "pred": "banking",
+      "raw": "A"
+    },
+    {
+      "q": "i want to tell susan that the meeting has been cancelled",
+      "gold": "utility",
+      "pred": "small_talk",
+      "raw": "I"
+    },
+    {
+      "q": "does travelling to st petersburg require a travel visa",
+      "gold": "travel",
+      "pred": "travel",
+      "raw": "F"
+    },
+    {
+      "q": "flip a coin for me and i call heads",
+      "gold": "utility",
+      "pred": "small_talk",
+      "raw": "I"
+    },
+    {
+      "q": "i can't remember if i added the fun run to my calendar yet; did i",
+      "gold": "home",
+      "pred": "small_talk",
+      "raw": "I"
+    },
+    {
+      "q": "which vaccines are meant for cuba",
+      "gold": "travel",
+      "pred": "travel",
+      "raw": "F"
+    },
+    {
+      "q": "i need you to find me a hotel with good reviews in phoenix",
+      "gold": "travel",
+      "pred": "travel",
+      "raw": "F"
+    },
+    {
+      "q": "can you help me change my insurance policy",
+      "gold": "work",
+      "pred": "work",
+      "raw": "H"
+    },
+    {
+      "q": "i saw a fraudulent transaction",
+      "gold": "banking",
+      "pred": "banking",
+      "raw": "A"
+    },
+    {
+      "q": "tell me how to get my points from credit card use cashed in",
+      "gold": "credit_cards",
+      "pred": "credit_cards",
+      "raw": "B"
+    }
+  ]
+}

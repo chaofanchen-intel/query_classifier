@@ -1,0 +1,82 @@
+{
+  "dataset": "clinc",
+  "model": "g128sym",
+  "prompt": "clinc_domain_qwen3",
+  "device": "NPU",
+  "pipe_config": {
+    "NPU_TURBO": "YES",
+    "MAX_PROMPT_LEN": 1024,
+    "MIN_RESPONSE_LEN": 512,
+    "NPUW_LLM_PREFILL_CHUNK_SIZE": 2048
+  },
+  "samples": 10,
+  "accuracy": 0.1,
+  "unparseable": 0,
+  "random_baseline": 0.1,
+  "latency_ms": {
+    "p50": 403.82968698395416,
+    "p95": 408.043057017494
+  },
+  "per_query": [
+    {
+      "q": "what's the estimated travel time to get to dc via bus",
+      "gold": "auto_commute",
+      "pred": "home",
+      "raw": "D"
+    },
+    {
+      "q": "i think i've misplaced my phone",
+      "gold": "utility",
+      "pred": "small_talk",
+      "raw": "I"
+    },
+    {
+      "q": "alter your accent",
+      "gold": "meta",
+      "pred": "small_talk",
+      "raw": "I"
+    },
+    {
+      "q": "can you roll a die for me",
+      "gold": "utility",
+      "pred": "small_talk",
+      "raw": "I"
+    },
+    {
+      "q": "i wanna know the carry-on rules for the flight i have",
+      "gold": "travel",
+      "pred": "home",
+      "raw": "D"
+    },
+    {
+      "q": "how much have i spent on tires this month",
+      "gold": "banking",
+      "pred": "small_talk",
+      "raw": "I"
+    },
+    {
+      "q": "would you freeze my bank account",
+      "gold": "banking",
+      "pred": "home",
+      "raw": "D"
+    },
+    {
+      "q": "what do i do to order new checkbooks for my well's fargo account",
+      "gold": "banking",
+      "pred": "small_talk",
+      "raw": "I"
+    },
+    {
+      "q": "what oil do i use when changing oil and how do i do it",
+      "gold": "auto_commute",
+      "pred": "home",
+      "raw": "D"
+    },
+    {
+      "q": "what is the number of pto days i have left",
+      "gold": "work",
+      "pred": "work",
+      "raw": "H"
+    }
+  ]
+}

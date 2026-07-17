@@ -1,0 +1,484 @@
+{
+  "model": "Qwen3-1.7B-FP16",
+  "backend": "openvino-genai-llm",
+  "device": "GPU.0",
+  "pipe_config": {
+    "ATTENTION_BACKEND": "PA"
+  },
+  "prompt_version": "cpu_routing_qwen3",
+  "timestamp": "2026-07-17T14:00:56",
+  "samples": 58,
+  "accuracy": 0.6896551724137931,
+  "under_routing": "7/10",
+  "latency_ms": {
+    "p50": 54.27727200003574,
+    "p95": 62.41851499999029,
+    "cold": 181.79394399976445
+  },
+  "per_query": [
+    {
+      "query": "Intel core ultra 5 processor 125u是否支持H.265（HEVC）硬件编解码？",
+      "gold": "A",
+      "pred": "A",
+      "raw_output": "A",
+      "latency_ms": 181.79394399976445,
+      "routing_label": "local"
+    },
+    {
+      "query": "i5-1235U的价格是多少？",
+      "gold": "A",
+      "pred": "A",
+      "raw_output": "A",
+      "latency_ms": 63.81474599993453,
+      "routing_label": "local"
+    },
+    {
+      "query": "Intel Core i5-1235U Processor的缓存是多少？",
+      "gold": "A",
+      "pred": "A",
+      "raw_output": "A",
+      "latency_ms": 53.46577399996022,
+      "routing_label": "local"
+    },
+    {
+      "query": "Intel Core i7-1255U Processor的内存规格",
+      "gold": "A",
+      "pred": "A",
+      "raw_output": "A",
+      "latency_ms": 62.41851499999029,
+      "routing_label": "local"
+    },
+    {
+      "query": "Intel Core i7-1355U Processor 有多少个性能核心",
+      "gold": "A",
+      "pred": "A",
+      "raw_output": "A",
+      "latency_ms": 59.51005399992937,
+      "routing_label": "local"
+    },
+    {
+      "query": "Intel Core Ultra 7 Processor 155H有几个性能核心和几个效能核心？",
+      "gold": "A",
+      "pred": "A",
+      "raw_output": "A",
+      "latency_ms": 52.741585000148916,
+      "routing_label": "local"
+    },
+    {
+      "query": "Intel Core Ultra 9 Processor 185H的Processor Base Power\n是多少？",
+      "gold": "A",
+      "pred": "A",
+      "raw_output": "A",
+      "latency_ms": 59.134121000170126,
+      "routing_label": "local"
+    },
+    {
+      "query": "Intel Xeon Platinum 8592+ 处理器的基础频率是多少？",
+      "gold": "A",
+      "pred": "A",
+      "raw_output": "A",
+      "latency_ms": 53.121126999940316,
+      "routing_label": "local"
+    },
+    {
+      "query": "Xeon E3-1230 v5 的CPU socket 类型是什么？",
+      "gold": "A",
+      "pred": "A",
+      "raw_output": "A",
+      "latency_ms": 58.137371000157145,
+      "routing_label": "local"
+    },
+    {
+      "query": "Xeon E5-2670 v3 的制造工艺是多少纳米？",
+      "gold": "A",
+      "pred": "A",
+      "raw_output": "A",
+      "latency_ms": 55.47733200000948,
+      "routing_label": "local"
+    },
+    {
+      "query": "Xeon E5-2697 v3 的L3缓存容量是多大？",
+      "gold": "A",
+      "pred": "A",
+      "raw_output": "A",
+      "latency_ms": 55.642788000113796,
+      "routing_label": "local"
+    },
+    {
+      "query": "Xeon Gold 6354 的处理器的热设计功耗（TDP）是多少瓦？",
+      "gold": "A",
+      "pred": "A",
+      "raw_output": "A",
+      "latency_ms": 53.23045900013312,
+      "routing_label": "local"
+    },
+    {
+      "query": "Xeon Platinum 8380 的核心数量是多少？",
+      "gold": "A",
+      "pred": "A",
+      "raw_output": "A",
+      "latency_ms": 57.840212999963114,
+      "routing_label": "local"
+    },
+    {
+      "query": "Xeon Platinum 8480+ 支持的最大内存容量是多少？",
+      "gold": "A",
+      "pred": "A",
+      "raw_output": "A",
+      "latency_ms": 54.27727200003574,
+      "routing_label": "local"
+    },
+    {
+      "query": "Xeon w7-2495X 支持的最大PCIe通道数是多少？",
+      "gold": "A",
+      "pred": "A",
+      "raw_output": "A",
+      "latency_ms": 58.441154999854916,
+      "routing_label": "local"
+    },
+    {
+      "query": "Xeon w9-3495X 的最大睿频频率是多少？",
+      "gold": "A",
+      "pred": "A",
+      "raw_output": "A",
+      "latency_ms": 54.473128999688925,
+      "routing_label": "local"
+    },
+    {
+      "query": "代号为“Ice Lake-SP”的是第几代Xeon可扩展处理器？",
+      "gold": "A",
+      "pred": "A",
+      "raw_output": "A",
+      "latency_ms": 52.99670500016873,
+      "routing_label": "local"
+    },
+    {
+      "query": "第四代Xeon Scalable处理器（Sapphire Rapids）支持哪种类型的内存？",
+      "gold": "A",
+      "pred": "A",
+      "raw_output": "A",
+      "latency_ms": 52.582070999960706,
+      "routing_label": "local"
+    },
+    {
+      "query": "Intel Core Ultra 5 Processor 125H和Intel Core Ultra 7 Processor \n155H两款处理器的Max Turbo Frequency分别是多少？",
+      "gold": "B",
+      "pred": "B",
+      "raw_output": "B",
+      "latency_ms": 56.46780100005344,
+      "routing_label": "local"
+    },
+    {
+      "query": "Intel Core Ultra 5 Processor 125H和Intel Core Ultra 7 Processor\n 155H两款处理器的Maximum Turbo Power分别是多少？",
+      "gold": "B",
+      "pred": "B",
+      "raw_output": "B",
+      "latency_ms": 56.933130999823334,
+      "routing_label": "local"
+    },
+    {
+      "query": "Lunar Lake处理器上市时间？",
+      "gold": "B",
+      "pred": "A",
+      "raw_output": "A",
+      "latency_ms": 56.732725000074424,
+      "routing_label": "local"
+    },
+    {
+      "query": "Meteor Lake处理器上市时间？",
+      "gold": "B",
+      "pred": "A",
+      "raw_output": "A",
+      "latency_ms": 56.7715050001425,
+      "routing_label": "local"
+    },
+    {
+      "query": "Meteor Lake处理器内存的规格",
+      "gold": "B",
+      "pred": "A",
+      "raw_output": "A",
+      "latency_ms": 52.18370800002958,
+      "routing_label": "local"
+    },
+    {
+      "query": "N100和i3-N305哪个处理器主频更高？",
+      "gold": "B",
+      "pred": "B",
+      "raw_output": "B",
+      "latency_ms": 52.12831200014989,
+      "routing_label": "local"
+    },
+    {
+      "query": "Xeon E5-2699 v4核心多还是Xeon Gold 5318Y核心多？",
+      "gold": "B",
+      "pred": "B",
+      "raw_output": "B",
+      "latency_ms": 52.50867700033268,
+      "routing_label": "local"
+    },
+    {
+      "query": "Xeon Platinum 8480+ 和 Xeon E7-8890 v4 哪个性能更强？",
+      "gold": "B",
+      "pred": "B",
+      "raw_output": "B",
+      "latency_ms": 56.87079600011202,
+      "routing_label": "local"
+    },
+    {
+      "query": "Xeon W-2100系列和Xeon E5-1600 v4系列哪个是最新推出的？",
+      "gold": "B",
+      "pred": "B",
+      "raw_output": "B",
+      "latency_ms": 57.172148000063316,
+      "routing_label": "local"
+    },
+    {
+      "query": "一个数据库服务器要求高内存带宽，在Xeon Scalable Processor和intel-atom-processor之间应选择哪个？",
+      "gold": "B",
+      "pred": "B",
+      "raw_output": "B",
+      "latency_ms": 53.47243000005619,
+      "routing_label": "local"
+    },
+    {
+      "query": "从产品定位看，Xeon Silver 4200系列和Xeon E5-2600 v4系列，哪个更适合主流双路服务器？",
+      "gold": "B",
+      "pred": "B",
+      "raw_output": "B",
+      "latency_ms": 51.725335999890376,
+      "routing_label": "local"
+    },
+    {
+      "query": "从发布时间看，是Xeon E7 v3还是Xeon E5 v3更晚推出？",
+      "gold": "B",
+      "pred": "B",
+      "raw_output": "B",
+      "latency_ms": 58.09028100020441,
+      "routing_label": "local"
+    },
+    {
+      "query": "判断：Xeon D-2700处理器属于Xeon Scalable处理器家族。",
+      "gold": "B",
+      "pred": "D",
+      "raw_output": "D",
+      "latency_ms": 52.37999900009527,
+      "routing_label": "local"
+    },
+    {
+      "query": "对比下Intel Core Ultra 5 125H和Intel Core Ultra 5 125U的\nProcessor Base Power",
+      "gold": "B",
+      "pred": "B",
+      "raw_output": "B",
+      "latency_ms": 51.39899999994668,
+      "routing_label": "local"
+    },
+    {
+      "query": "E3-1225 从 v2 到 v6 的基础频率提升了多少？",
+      "gold": "B",
+      "pred": "A",
+      "raw_output": "A",
+      "latency_ms": 56.73970299994835,
+      "routing_label": "local"
+    },
+    {
+      "query": "E3-1225 从 v3 到 v6 的 TDP 降低了多少？",
+      "gold": "B",
+      "pred": "A",
+      "raw_output": "A",
+      "latency_ms": 55.803961000037816,
+      "routing_label": "local"
+    },
+    {
+      "query": "FCLGA1150 插槽的 E3-1226 V3 与 E3-1225 V3 的最大睿频差值是多少？",
+      "gold": "B",
+      "pred": "A",
+      "raw_output": "A",
+      "latency_ms": 57.58505000039804,
+      "routing_label": "local"
+    },
+    {
+      "query": "列出所有有16个total cores的Intel Core ultra product，从小到大排序",
+      "gold": "C",
+      "pred": "C",
+      "raw_output": "C",
+      "latency_ms": 52.08703000016612,
+      "routing_label": "local"
+    },
+    {
+      "query": "酷睿i3x系列中哪些是12th处理器？全部列出来 从小到大排序，\n只用列出型号即可",
+      "gold": "C",
+      "pred": "C",
+      "raw_output": "C",
+      "latency_ms": 51.784849999876315,
+      "routing_label": "local"
+    },
+    {
+      "query": "资料库中哪些是Lunar Lake的处理器？从小到大排序",
+      "gold": "C",
+      "pred": "C",
+      "raw_output": "C",
+      "latency_ms": 51.66249399962908,
+      "routing_label": "local"
+    },
+    {
+      "query": "资料库中哪些是Meteor Lake的处理器？列出型号，从小到大排序即可",
+      "gold": "C",
+      "pred": "C",
+      "raw_output": "C",
+      "latency_ms": 57.316747999720974,
+      "routing_label": "local"
+    },
+    {
+      "query": "xeon e3系列中，TDP 最低的是哪一款？",
+      "gold": "C",
+      "pred": "B",
+      "raw_output": "B",
+      "latency_ms": 51.588301000265346,
+      "routing_label": "cloud"
+    },
+    {
+      "query": "intel-xeon-cpu-max 系列中，列出所有Total Cores大于40的型号",
+      "gold": "C",
+      "pred": "C",
+      "raw_output": "C",
+      "latency_ms": 52.045071000065946,
+      "routing_label": "cloud"
+    },
+    {
+      "query": "xeon-processor-e系列中，首个支持 DDR4 内存（按发布日期最早）的型号是哪一款？并给出发布时间",
+      "gold": "C",
+      "pred": "C",
+      "raw_output": "C",
+      "latency_ms": 51.750882000305864,
+      "routing_label": "cloud"
+    },
+    {
+      "query": "xeon-processor-e1225系列中，最大睿频 ≥3.6 GHz 的处理器，TDP 最低的是哪一款？",
+      "gold": "C",
+      "pred": "B",
+      "raw_output": "B",
+      "latency_ms": 51.64613200031454,
+      "routing_label": "local"
+    },
+    {
+      "query": "xeon-processor-e1225系列中，哪一款的最大内存带宽最高？",
+      "gold": "C",
+      "pred": "B",
+      "raw_output": "B",
+      "latency_ms": 56.97707500030447,
+      "routing_label": "cloud"
+    },
+    {
+      "query": "xeon-processor-e1220系列中，在 22 nm 制程的型号中，TDP 最低的是哪一款？",
+      "gold": "C",
+      "pred": "B",
+      "raw_output": "B",
+      "latency_ms": 51.921510999818565,
+      "routing_label": "cloud"
+    },
+    {
+      "query": "xeon-processor-e1226系列中，仅支持 DDR3/DDR3L（不含 DDR4）的最新发布型号是哪一款？",
+      "gold": "C",
+      "pred": "B",
+      "raw_output": "B",
+      "latency_ms": 51.90508499981661,
+      "routing_label": "local"
+    },
+    {
+      "query": "xeon-processor-e1225系列中，使用 FCLGA1151 插槽的型号中，TDP 更低的是哪一款？",
+      "gold": "C",
+      "pred": "B",
+      "raw_output": "B",
+      "latency_ms": 52.62154599995483,
+      "routing_label": "cloud"
+    },
+    {
+      "query": "对比下i7-1355U/i5-1335U/i3-1315U的规格",
+      "gold": "D",
+      "pred": "D",
+      "raw_output": "D",
+      "latency_ms": 57.32731000034619,
+      "routing_label": "local"
+    },
+    {
+      "query": "对比下Intel Core Ultra 5 Processor 125H和Intel Core Ultra 7\n Processor 155H的规格",
+      "gold": "D",
+      "pred": "D",
+      "raw_output": "D",
+      "latency_ms": 51.583008999841695,
+      "routing_label": "local"
+    },
+    {
+      "query": "推荐一款16个total cores，频率最高的，价格最便宜的Intel Core ultra product",
+      "gold": "D",
+      "pred": "D",
+      "raw_output": "D",
+      "latency_ms": 52.13792299991837,
+      "routing_label": "cloud"
+    },
+    {
+      "query": "在选择Xeon Gold 6454S 和 Xeon Platinum 8156 用于数据库服务器时，除了核心频率与价格，哪些底层技术（如AVX-512支持、内存加密、PCIe版本）会显著影响OLTP性能？",
+      "gold": "D",
+      "pred": "C",
+      "raw_output": "C",
+      "latency_ms": 90.46091300024273,
+      "routing_label": "local"
+    },
+    {
+      "query": "XEON E-2300 系列的 E-2388G 和 E-2378G 时，除了频率和价格，还有哪些深层次的技术差异会影响数据库服务器的选择？",
+      "gold": "D",
+      "pred": "D",
+      "raw_output": "D",
+      "latency_ms": 55.815924999933486,
+      "routing_label": "local"
+    },
+    {
+      "query": "比较Intel Core i7-14700K和i7-13700K的“Intel Thread Director”硬件结构。第14代处理器在Thread Director的调度逻辑或支持的P-core/E-core类型上是否有更新？",
+      "gold": "D",
+      "pred": "C",
+      "raw_output": "C",
+      "latency_ms": 56.70240500012369,
+      "routing_label": "local"
+    },
+    {
+      "query": "在选购Xeon Gold 64xx系列和Xeon Platinum 84xx系列时，除了每CPU成本，还应从“TDP”和“Per Core Performance”角度进行哪些关键权衡？可以用Xeon Gold 6458Q和Xeon Platinum 8458P举例",
+      "gold": "D",
+      "pred": "D",
+      "raw_output": "D",
+      "latency_ms": 57.97617500002161,
+      "routing_label": "local"
+    },
+    {
+      "query": "在选择Xeon Gold 6314U 和 Xeon Gold 6328h 用于数据库服务器时，除了核心频率与价格，哪些底层技术（如AVX-512支持、内存加密、PCIe版本）会显著影响OLTP性能？",
+      "gold": "D",
+      "pred": "C",
+      "raw_output": "C",
+      "latency_ms": 57.25298300012582,
+      "routing_label": "local"
+    },
+    {
+      "query": "Intel core ultra 5 processor 125u是否支持H.265（HEVC）\n硬件编解码？",
+      "gold": "A",
+      "pred": "A",
+      "raw_output": "A",
+      "latency_ms": 52.4296809999214,
+      "routing_label": "cloud"
+    },
+    {
+      "query": "xeon-processor-e系列中，首个支持 DDR4 内存（按发布日期最早）的型号是哪一款？",
+      "gold": "C",
+      "pred": "B",
+      "raw_output": "B",
+      "latency_ms": 52.05024399992908,
+      "routing_label": "cloud"
+    },
+    {
+      "query": "xeon-processor-e31225系列中，使用 FCLGA1151 插槽的型号中，TDP 更低的是哪一款？",
+      "gold": "C",
+      "pred": "B",
+      "raw_output": "B",
+      "latency_ms": 52.55461899969305,
+      "routing_label": "cloud"
+    }
+  ]
+}

@@ -72,12 +72,11 @@ def collect_ovg_results():
         d = json.load(open(f))
         if "per_query" not in d or not d["per_query"]:
             continue
-        # extract model and prompt from filename
-        name = Path(f).stem  # ovg_Qwen3-1.7B_GPU1_v6_20260609-165135
-        parts = name.split("_")
-        model = parts[1]
-        prompt = parts[3] if len(parts) > 3 else "?"
-        key = ("cpu_ovg", f"{model}_{prompt}")
+        # prefer JSON fields (robust) over filename parsing
+        model = d.get("model", Path(f).stem)
+        device = d.get("device", "?")
+        prompt = d.get("prompt_version", "?")
+        key = ("cpu_ovg", f"{model}_{device}_{prompt}")
         grouped[key].append((f, d))
     for key, items in grouped.items():
         _, d = sorted(items, key=lambda x: x[0])[-1]
@@ -97,7 +96,8 @@ def collect_pub_results():
         ds = d.get("dataset", "?")
         model = d.get("model", "?")
         prompt = d.get("prompt", "?")
-        key = (f"pub_{ds}", f"{model}_{prompt}")
+        device = d.get("device", "?")
+        key = (f"pub_{ds}", f"{model}_{device}_{prompt}")
         grouped[key].append((f, d))
     for key, items in grouped.items():
         _, d = sorted(items, key=lambda x: x[0])[-1]

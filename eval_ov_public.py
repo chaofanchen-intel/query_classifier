@@ -67,10 +67,18 @@ def main() -> None:
     parser.add_argument("--limit", type=int, default=None,
                         help="evaluate on a random stratified-ish subset of N samples (fast iteration)")
     parser.add_argument("--seed", type=int, default=42, help="sampling seed for --limit")
+    parser.add_argument("--pipe-config", action="append", default=None,
+                        help="extra pipeline property KEY=VAL (repeatable); overrides auto defaults")
+    parser.add_argument("--no-auto-config", action="store_true",
+                        help="disable per-device auto config (NPU turbo/NPUW, GPU PA)")
     args = parser.parse_args()
 
     import openvino_genai as ov_genai
     from transformers import AutoTokenizer
+    from pipe_config import build_pipe_config
+
+    pipe_cfg = build_pipe_config(args.device, args.pipe_config, auto=not args.no_auto_config)
+    print(f"Pipe config: {pipe_cfg}")
 
     ds = DATASETS[args.dataset]
     labels = ds["labels"]
@@ -97,7 +105,7 @@ def main() -> None:
     tok = AutoTokenizer.from_pretrained(args.hf_model)
     t0 = time.time()
     pipe = (ov_genai.LLMPipeline if args.pipeline == "llm" else ov_genai.VLMPipeline)(
-        args.ov_model, args.device)
+        args.ov_model, args.device, **pipe_cfg)
     print(f"  loaded in {time.time()-t0:.1f}s")
 
     cfg = ov_genai.GenerationConfig()
@@ -130,7 +138,7 @@ def main() -> None:
                 return lab
         return "unknown"
 
-    gold, pred, latencies, unparsed = [], [], [], 0
+    gold, pred, latencies, unparsed, raws = [], [], [], 0, []
     for i, rec in enumerate(records):
         messages = [
             {"role": "system", "content": system_prompt},
@@ -141,6 +149,7 @@ def main() -> None:
         t1 = time.perf_counter()
         raw = generate(prompt)
         latencies.append((time.perf_counter() - t1) * 1000)
+        raws.append(raw)
         p = parse(raw)
         if p == "unknown":
             unparsed += 1
@@ -166,11 +175,12 @@ def main() -> None:
     out = RESULTS_DIR / f"pub_{args.dataset}_{tag}_{args.prompt}_{ts}.json"
     with out.open("w", encoding="utf-8") as f:
         json.dump({"dataset": args.dataset, "model": tag, "prompt": args.prompt,
+                   "device": args.device, "pipe_config": pipe_cfg,
                    "samples": n, "accuracy": accuracy, "unparseable": unparsed,
                    "random_baseline": 1/len(labels),
                    "latency_ms": {"p50": p50, "p95": p95},
                    "per_query": [{"q": records[i][ds["query_key"]][:120], "gold": gold[i],
-                                  "pred": pred[i]} for i in range(n)]},
+                                  "pred": pred[i], "raw": raws[i]} for i in range(n)]},
                   f, ensure_ascii=False, indent=2)
     print(f"Saved {out.name}")
 

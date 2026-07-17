@@ -152,13 +152,19 @@ python plot_confusion.py
 1. **`apply_chat_template=False` 必设**（脚本已设）：先用 HF tokenizer 预渲染模板并 `enable_thinking=False`，若让 pipeline 再套一次模板会重开 thinking、破坏 `max_new_tokens=1`，导致数字虚高。
 2. **聚类降维有效**：BANKING77 从 77 类聚成 10 类，准确率大幅提升（历史上 ~41% → ~73%）。
 3. **prompt 影响很大**：换模型后建议在小样本（`--limit`）上先调 prompt 再跑全量。
+4. **量化配置对准确率影响极大（2026-07-15 实测）**：`INT4 group_size=-1 逐通道对称`（激进）会大掉 20–25pp，NPU 上甚至输出垃圾 token。请用 `INT4 group_size=128`（iGPU 用非对称，NPU 因硬件要求对称需配 `--ratio 0.8` 混合精度）。详见 [reports/REPORT_Qwen3-1.7B-NPU_Qwen3.5-2B-iGPU.md](reports/REPORT_Qwen3-1.7B-NPU_Qwen3.5-2B-iGPU.md)。
+5. **NPU 需要对称量化**：非对称 INT4 在 NPU 编译失败（`ZE_RESULT_ERROR_INVALID_ARGUMENT`）。NPU 运行还需 `NPU_TURBO=YES` + `MAX_PROMPT_LEN`/`MIN_RESPONSE_LEN`/`NPUW_LLM_PREFILL_CHUNK_SIZE`（脚本按设备自动注入，见 `pipe_config.py`）。
 
-## 10. 参考准确率（历史，Qwen3.5-2B / FP16 / 全量）
+## 10. 参考准确率
 
-仅供对照量级，你换模型后以实跑为准：
+> ⚠️ **2026-07-15 修正**：cpu_routing 的历史 ~93% **在当前 `eval_set` 上复现不出来**——即便 FP16 也只有 ~60%（4 类）。原因是当前 `eval_set` 已被加难（`correct_by` 显示连 14B 也只有 83%，C「发现型」类历史可解率仅 53%），一个 2B 模型不可能到 93%；且开 thinking 反而更差。CLINC/BANKING 的历史值仍可精确复现，证明评测链路正确。详见评测报告的「分析 B」。
 
-| 任务 | 数据集 | 推荐 prompt | 准确率 |
-|---|---|---|---|
-| 中文 4 类路由 | eval_set (58) | `cpu_routing_qwen3.5` | ≈ 93% |
-| CLINC150 10-domain | clinc (4500) | `clinc_domain_qwen3.5` | ≈ 78% |
-| BANKING cluster10 | banking_cluster10 (3080) | `banking_cluster10_qwen3.5` | ≈ 73% |
+**Qwen3.5-2B 实测（2026-07-15，本机 OpenVINO，全量）：**
+
+| 任务 | 数据集 | prompt | FP16 | INT4-g128（推荐, iGPU） | 旧 INT4(g=-1) | 历史文档值 |
+|---|---|---|---:|---:|---:|---:|
+| 中文 4 类路由 | eval_set (58) | `cpu_routing_qwen3.5` | 60.3% | 51.7% | 37.9% | ~~93%~~（旧集合） |
+| CLINC150 10-domain | clinc (4500) | `clinc_domain_qwen3.5` | 78.0% | 75.7% | 52.1% | ≈78% ✓ |
+| BANKING cluster10 | banking_cluster10 (3080) | `banking_cluster10_qwen3.5` | 72.9% | 70.2% | 45.4% | ≈73% ✓ |
+
+Qwen3-1.7B（FP16 参考，GPU）：cpu_routing 69.0% / CLINC 67.6% / BANKING 57.9%。NPU 上推荐 `INT4-g128-sym + ratio=0.8`（cpu_routing 65.5%）。完整数据、逐类召回、混淆矩阵见 `reports/` 与 `confusion_matrices/`。

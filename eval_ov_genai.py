@@ -48,10 +48,18 @@ def main() -> None:
     parser.add_argument("--device", default="GPU.1")
     parser.add_argument("--prompt", default="cpu_routing_qwen3.5")
     parser.add_argument("--tag", default=None, help="label for output file")
+    parser.add_argument("--pipe-config", action="append", default=None,
+                        help="extra pipeline property KEY=VAL (repeatable); overrides auto defaults")
+    parser.add_argument("--no-auto-config", action="store_true",
+                        help="disable per-device auto config (NPU turbo/NPUW, GPU PA)")
     args = parser.parse_args()
 
     import openvino_genai as ov_genai
     from transformers import AutoTokenizer
+    from pipe_config import build_pipe_config
+
+    pipe_cfg = build_pipe_config(args.device, args.pipe_config, auto=not args.no_auto_config)
+    print(f"Pipe config: {pipe_cfg}")
 
     system_prompt = (PROMPTS_DIR / f"{args.prompt}.txt").read_text(encoding="utf-8").strip()
     records = [json.loads(l) for l in EVAL_SET_PATH.open(encoding="utf-8") if l.strip()]
@@ -62,9 +70,9 @@ def main() -> None:
     tok = AutoTokenizer.from_pretrained(args.hf_model)
     t0 = time.time()
     if args.pipeline == "llm":
-        pipe = ov_genai.LLMPipeline(args.ov_model, args.device)
+        pipe = ov_genai.LLMPipeline(args.ov_model, args.device, **pipe_cfg)
     else:
-        pipe = ov_genai.VLMPipeline(args.ov_model, args.device)
+        pipe = ov_genai.VLMPipeline(args.ov_model, args.device, **pipe_cfg)
     print(f"  loaded in {time.time()-t0:.1f}s")
 
     cfg = ov_genai.GenerationConfig()
@@ -122,6 +130,7 @@ def main() -> None:
     out_path = RESULTS_DIR / f"ovg_{tag}_{args.device.replace('.','')}_{args.prompt}_{ts}.json"
     with out_path.open("w", encoding="utf-8") as f:
         json.dump({"model": tag, "backend": f"openvino-genai-{args.pipeline}", "device": args.device,
+                   "pipe_config": pipe_cfg,
                    "prompt_version": args.prompt, "timestamp": datetime.now().isoformat(timespec="seconds"),
                    "samples": n, "accuracy": accuracy, "under_routing": f"{under}/{gold_cloud}",
                    "latency_ms": {"p50": p50, "p95": p95, "cold": latencies[0]},
