@@ -167,4 +167,8 @@ python plot_confusion.py
 | CLINC150 10-domain | clinc (4500) | `clinc_domain_qwen3.5` | 78.0% | 75.7% | 52.1% | ≈78% ✓ |
 | BANKING cluster10 | banking_cluster10 (3080) | `banking_cluster10_qwen3.5` | 72.9% | 70.2% | 45.4% | ≈73% ✓ |
 
-Qwen3-1.7B（FP16 参考，GPU）：cpu_routing 69.0% / CLINC 67.6% / BANKING 57.9%。NPU 上推荐 `INT4-g128-sym + ratio=0.8`（cpu_routing 65.5%）。完整数据、逐类召回、混淆矩阵见 `reports/` 与 `confusion_matrices/`。
+Qwen3-1.7B（FP16 参考，GPU）：cpu_routing 69.0% / CLINC 67.6% / BANKING 57.9%。
+- **GPU（非对称）推荐 `INT4-g128 + AWQ`**：CLINC 54.0% / BANKING 55.1%（仅 g128 只有 44.9% / 46.6%，小模型需叠 AWQ）。
+- **NPU（对称）**：大任务用 `INT4-g128sym + AWQ`（CLINC 59.8% / BANKING 57.4% ≈ FP16），小/特异任务用 `INT4-g128sym + ratio=0.8`（cpu_routing 65.5%）。
+
+**全量 23 组合对比（FP16/INT8/INT4 各变体 × iGPU/dGPU/NPU × 3 任务）、图表与逐类混淆矩阵见 [reports/REPORT_量化全量对比_Qwen3-1.7B_Qwen3.5-2B.md](reports/REPORT_量化全量对比_Qwen3-1.7B_Qwen3.5-2B.md)（2026-07-18）。**

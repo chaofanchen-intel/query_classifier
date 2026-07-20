@@ -1,0 +1,60 @@
+================================================================================
+  Qwen3 OpenVINO GenAI Text-Generation Benchmark (C++)
+================================================================================
+  Devices:       GPU.0 
+  infer_count:   512
+  num_iters:     10 (+1 warm-up)
+  permutation:   ON
+  profile:       OFF
+
+################################################################################
+  Model: Qwen3-1.7B-FP16 | Device: GPU.0 | Backend: LLMPipeline
+################################################################################
+  Plugin config: ATTENTION_BACKEND=PA CACHE_DIR= PERFORMANCE_HINT=LATENCY
+  Compiling pipeline...
+  Compiled in 1.95s
+  Prompts loaded: 1
+
+  [P0] input_tokens=1000  infer_count(max_new)=512  num_iters=10 (+1 warmup)  permute=true
+    [warm-up][0][P0] in=1000 out=512 TTFT=334.7ms TPOT=49.58ms E2E=25669ms TPS=19.9
+    [1][P0] in=1000 out=512 TTFT=277.3ms TPOT=48.82ms E2E=25226ms TPS=20.3
+    [2][P0] in=1000 out=512 TTFT=274.4ms TPOT=49.22ms E2E=25426ms TPS=20.1
+    [3][P0] in=1000 out=512 TTFT=276.5ms TPOT=49.54ms E2E=25593ms TPS=20.0
+    [4][P0] in=1000 out=512 TTFT=274.0ms TPOT=49.36ms E2E=25495ms TPS=20.1
+    [5][P0] in=1000 out=512 TTFT=273.8ms TPOT=49.48ms E2E=25557ms TPS=20.0
+    [6][P0] in=1000 out=512 TTFT=273.8ms TPOT=50.02ms E2E=25836ms TPS=19.8
+    [7][P0] in=1000 out=512 TTFT=277.0ms TPOT=49.80ms E2E=25727ms TPS=19.9
+    [8][P0] in=1000 out=512 TTFT=274.6ms TPOT=49.59ms E2E=25615ms TPS=20.0
+    [9][P0] in=1000 out=512 TTFT=273.7ms TPOT=49.50ms E2E=25567ms TPS=20.0
+    [10][P0] in=1000 out=512 TTFT=273.3ms TPOT=50.35ms E2E=26003ms TPS=19.7
+
+================================================================================
+  Result: Qwen3-1.7B-FP16 | GPU.0 | text-only | prompt[0] in=1000 out_max=512
+  Pipeline: LLMPipeline  measured_iters=10  compile=1.95s
+================================================================================
+  Metric                   Mean      Std        P50        P90        P95      Min      Max  Unit
+  ------------------ ---------- -------- ---------- ---------- ---------- -------- --------  ----
+  TTFT                   274.83     1.44     274.20     277.02     277.16   273.26   277.30  [ms]
+  TPOT                    49.57     0.40      49.52      50.06      50.20    48.82    50.35  [ms]
+  1st infer              274.78     1.44     274.14     276.97     277.11   273.21   277.25  [ms]
+  2nd infer               49.56     0.40      49.52      50.05      50.20    48.82    50.35  [ms]
+  Throughput              20.00     0.16      20.02      20.15      20.22    19.69    20.30  [tok/s]
+  Decode TPS              20.18     0.16      20.19      20.33      20.41    19.86    20.48  [tok/s]
+  Output tokens          512.00     0.00     512.00     512.00     512.00   512.00   512.00  [tok]
+  Gen time                25.60     0.20      25.58      25.85      25.93    25.23    26.00  [s]
+  Prefill                274.83     1.44     274.20     277.02     277.16   273.26   277.30  [ms]
+  Decode               25329.69   205.26   25304.93   25579.31   25654.41 24948.43 25729.52  [ms]
+  E2E                  25604.53   204.62   25580.04   25853.02   25927.90 25225.73 26002.78  [ms]
+  Tokenization             0.56     0.01       0.56       0.57       0.59     0.55     0.60  [ms]
+  Detokenization           0.07     0.01       0.07       0.08       0.08     0.06     0.08  [ms]
+
+  --- Memory ---
+  Memory monitor: unavailable/disabled
+
+  --- Device Utilization ---
+================================================================================
+CSV  appended to: query_classifier_handoff/perf_results/perf.csv
+JSON appended to: query_classifier_handoff/perf_results/perf.json
+
+  Total runs: 1
+  Done.
