@@ -14,6 +14,9 @@
 
 ## 0. 核心结论（TL;DR）
 
+> 🔴 **重大修正（2026-07-20）：`ATTENTION_BACKEND=PA` 在 Qwen3.5-2B 的 VLM 管线上有精度 bug。**
+> 本报告早期版本给 GPU 自动注入 PA（PagedAttention），并**误以为它对精度无损**。经核实：PA 会**静默**把 **Qwen3.5-2B（VLMPipeline）在 cpu_routing 上**的精度从 **93.1%（SDPA，正确）压到 60.3%**。范围经实验界定为**仅** 2B-VLM×cpu_routing——CLINC/BANKING（2B）与全部 1.7B（LLMPipeline）在 PA 下与 SDPA **完全一致**。**已把 GPU 默认改回 SDPA**（`pipe_config.py`）。因此：① 撤回原「分析 B」（FP16 达不到 93% 是 eval_set 太难）——**错误**，文档 93% 用 SDPA 完全可复现；② 下文 **2B 的 cpu_routing 列已更新为 SDPA 正确值**；③ 2B 的**延迟数据是 PA 口径**，安全的 SDPA 路径约 5× 慢（详见 §3.5 与新增 §8）。1.7B 的全部结论不受影响。
+
 1. **仓库自带的激进 INT4（`group_size=-1` 逐通道、对称、`ratio=1.0`）是准确率崩塌的主因**，与模型/设备无关。它在 GPU 上让 2B 掉 20–25pp、让 1.7B 掉 40–48pp；在 **NPU 上直接产出 91% 垃圾 token**（CLINC 4107/4500 无法解析，准确率 1.5%）。
 
 2. **恢复 INT4 精度的配方随设备的对称性约束而不同，且小模型更难救**：
@@ -34,9 +37,11 @@
    - **iGPU 小模型**：精度优先 → 1.7B INT8（67.9%）；吞吐优先 → 1.7B INT4-g128+AWQ（54.0%，71 tok/s）；
    - **NPU**：大任务 → 1.7B g128sym+AWQ（59.8/57.4，TTFT 401/TPOT 17.9）；小任务 → g128sym r0.8（cpu 65.5）。
 
-5. **FP16 达不到文档 cpu_routing ~93% 是 `eval_set` 被加难所致，不是流水线问题**：FP16 在 CLINC(78.0%)/BANKING(72.9%) 上**精确复现**文档，证明链路正确；cpu_routing 的 `correct_by` 显示连 14B 也仅 83%、C「发现型」类历史可解率仅 53%，2B 不可能到 93%。
+5. **文档 cpu_routing ~93% 是真实且可复现的（用 SDPA）**：Qwen3.5-2B FP16 在 **SDPA** 下 cpu_routing = **93.1%**，与文档精确吻合；此前测得的 60.3% 纯属 PA bug（见上方修正与 §8）。CLINC(78.0%)/BANKING(72.9%) 无论 PA/SDPA 都精确复现文档。**原「eval_set 太难/93% 不可达」的结论作废。**
 
 6. **NPU「很慢」的原因**：静态流水线把每次 prefill 补齐到 `MAX_PROMPT_LEN`；且 decode 对 INT8 极慢（见结论 3）。准确率评测（1-token）逐条 p50——激进 INT4 159ms、可用 4-bit ~330–350ms、INT8 670ms，4500 条 ≈ 30 分钟。用户记忆中的「~200ms」正是**激进 INT4（快但输出垃圾）**。
+
+7. **中文/混合校准 AWQ 救回 2B 的 INT4 cpu_routing（补充实验，§8.5）**：cpu_routing 是中文、CLINC/BANKING 是英文；纯 INT4-g128 的 cpu 只 51.7（FP16 93.1）。用**通用中文+英文混合语料**做 AWQ **并叠加 20% INT8 混合精度（ratio 0.8）**：**cpu 51.7→82.8（+31，逼近 FP16）**，CLINC/BANKING 各仅降 ~1pp，三任务均值 75.4（追平 INT8），模型仍 1.3G（≈纯 4-bit）。这是「INT4 又不在三个数据集上明显掉精度」的**最佳方案**：`AWQ(mixed) + g128 + ratio0.8`。（纯 AWQ 会拿英文换中文；只用中文校准会拖累英文 BANKING −6.9。）
 
 ---
 
@@ -120,18 +125,21 @@ python plot_confusion.py    # -> confusion_matrices/*.png + 逐类召回表
 
 ### 2.2 Qwen3.5-2B（VLM）
 
-| 设备 | 量化 | cpu(58) | CLINC(4500) | BANKING(3080) | p50 ms | unpars(clinc) | 运行时 |
-|---|---|---:|---:|---:|---:|---:|---|
-| **iGPU** | FP16 | 60.3 | **78.0** | **72.9** | 70 | 0 | fp16 参考 |
-| iGPU | INT8 | 69.0 | 76.2 | 72.1 | 41 | 0 | 8-bit |
-| iGPU | INT4 激进(g=-1) | 37.9 | 52.1 | 45.4 | 35 | 2 | 4-bit（崩） |
-| **iGPU** | **INT4 g128(非对称) ✅** | 51.7 | **75.7** | **70.2** | 40 | 0 | **4-bit（推荐）** |
-| **dGPU** | FP16 | 60.3 | 78.0 | 72.9 | **21** | 0 | fp16 参考 |
-| dGPU | INT8 | 67.2 | 76.0 | 72.2 | 28 | 0 | 8-bit |
-| dGPU | INT4 激进(g=-1) | 37.9 | 52.8 | 45.9 | 25 | 0 | 4-bit（崩） |
-| **dGPU** | **INT4 g128(非对称) ✅** | 51.7 | 75.6 | 70.3 | 28 | 0 | **4-bit（推荐）** |
+**cpu(58) 列已更新为 SDPA 正确值**（原 PA 值加删除线并列，见 §8）。CLINC/BANKING 不受 PA 影响，原值即正确。
 
-> 注：Qwen3.5-2B 因硬件档期未跑 NPU（仅 1.7B 在 NPU）；2B 用 `image-text-to-text`（VLM）导出。
+| 设备 | 量化 | cpu(58) SDPA | CLINC(4500) | BANKING(3080) | p50 ms (PA†) | unpars(clinc) | 运行时 |
+|---|---|---:|---:|---:|---:|---:|---|
+| **iGPU** | FP16 | **93.1** (~~60.3~~) | **78.0** | **72.9** | 70 | 0 | fp16 参考 |
+| iGPU | INT8 | 75.9 (~~69.0~~) | 76.2 | 72.1 | 41 | 0 | 8-bit |
+| iGPU | INT4 激进(g=-1) | 34.5 (~~37.9~~) | 52.1 | 45.4 | 35 | 2 | 4-bit（崩） |
+| **iGPU** | **INT4 g128(非对称) ✅** | 51.7 (51.7) | **75.7** | **70.2** | 40 | 0 | **4-bit（推荐）** |
+| **dGPU** | FP16 | **93.1** (~~60.3~~) | 78.0 | 72.9 | **21** | 0 | fp16 参考 |
+| dGPU | INT8 | 75.9 (~~67.2~~) | 76.0 | 72.2 | 28 | 0 | 8-bit |
+| dGPU | INT4 激进(g=-1) | 34.5 (~~37.9~~) | 52.8 | 45.9 | 25 | 0 | 4-bit（崩） |
+| **dGPU** | **INT4 g128(非对称) ✅** | 51.7 (51.7) | 75.6 | 70.3 | 28 | 0 | **4-bit（推荐）** |
+
+> † **p50 为 PA 口径**（PA 在 cpu_routing 上结果错误，但延迟快）。cpu_routing 用正确的 SDPA 时逐条 p50 ~322ms（约 5× PA 的 66ms，见 §3.5/§8）。cpu(58) accuracy 在 GPU.0 用 SDPA 重测，与设备无关，故 iGPU/dGPU 同值。
+> 注：Qwen3.5-2B 因硬件档期未跑 NPU（仅 1.7B 在 NPU）；2B 用 `image-text-to-text`（VLM）导出。PA bug 详见 **§8**。
 
 ---
 
@@ -177,14 +185,23 @@ python plot_confusion.py    # -> confusion_matrices/*.png + 逐类召回表
 | **INT4 g128sym r0.8 ✅** | 413 | 415 | 19.5 | 49.4 | 51.4 | 54.8 | 48.2 | **65.5** |
 | **INT4 g128sym+AWQ ✅** | **401** | 403 | **17.9** | **53.5** | 55.7 | **59.8** | **57.4** | 36.2 |
 
-**Qwen3.5-2B @ iGPU（GPU.0）**
+**Qwen3.5-2B @ iGPU（GPU.0）** — ⚠️ **延迟列为 PA 口径**；PA 在 cpu_routing 上结果错误（见 §8），安全的 SDPA 路径见下方「2B SDPA 延迟」。cpu 列已更正为 SDPA。
 
-| 量化 | TTFT ms | TTFT p90 | TPOT ms | TPS | Decode TPS | CLINC | BANK | cpu |
-|---|---:|---:|---:|---:|---:|---:|---:|---:|
-| FP16 | 356 | 358 | 50.2 | 19.7 | 19.9 | 78.0 | 72.9 | 60.3 |
-| INT8 | 281 | 283 | 20.8 | 47.0 | 48.1 | 76.2 | 72.1 | 69.0 |
-| INT4 激进(g=-1) | 263 | 267 | 14.2 | 68.2 | 70.6 | 52.1 | 45.4 | 37.9 |
-| **INT4 g128 ✅** | 305 | 310 | **14.7** | **65.7** | 68.2 | **75.7** | 70.2 | 51.7 |
+| 量化 | TTFT ms (PA†) | TPOT ms (PA†) | TPS (PA†) | CLINC | BANK | cpu (SDPA) |
+|---|---:|---:|---:|---:|---:|---:|
+| FP16 | 356 | 50.2 | 19.7 | 78.0 | 72.9 | **93.1** (~~60.3~~) |
+| INT8 | 281 | 20.8 | 47.0 | 76.2 | 72.1 | 75.9 (~~69.0~~) |
+| INT4 激进(g=-1) | 263 | 14.2 | 68.2 | 52.1 | 45.4 | 34.5 (~~37.9~~) |
+| **INT4 g128 ✅** | 305 | **14.7** | **65.7** | **75.7** | 70.2 | 51.7 |
+
+**2B SDPA 延迟（安全路径，`perf_results/perf_sdpa.json`）**：
+
+| 量化 | PA TTFT | SDPA TTFT | PA TPOT | SDPA TPOT | 说明 |
+|---|---:|---:|---:|---:|---|
+| FP16 | 356 | **496** | 50.2 | 52.9 | 1k prefill 下 SDPA≈1.4× PA |
+| INT4-g128 | 305 | **448** | 14.7 | 16.6 | 同上 |
+
+> SDPA/PA 的延迟比**随 prompt 长度变**：**短 prompt（cpu_routing ≤521 token，1 token 出）PA 66ms vs SDPA 322ms ≈ 4.9×**；**1k prefill 时只 ~1.4×**（prefill 计算量主导，两后端趋同）。**结论：2B-VLM 部署 cpu_routing 类任务必须用 SDPA（短 prompt 下要吃 ~5× 延迟）；部署 CLINC/BANKING 类任务 PA 安全且快。**
 
 ### 3.5.2 关键结论
 
@@ -216,13 +233,15 @@ python plot_confusion.py    # -> confusion_matrices/*.png + 逐类召回表
 
 | 场景 | 推荐 | 依据 |
 |---|---|---|
-| **iGPU · 综合最佳** | **Qwen3.5-2B INT4-g128** | CLINC 75.7%（≈FP16 78），TTFT 305ms@1k（短 prompt ~40ms），TPOT 14.7ms/66 tok/s——散点左上角 |
+| **iGPU · CLINC/BANKING 类任务** | **Qwen3.5-2B INT4-g128（PA 亦安全）** | CLINC 75.7%（≈FP16 78），TTFT 305ms@1k（短 prompt ~40ms），TPOT 14.7ms/66 tok/s。该配置 PA/SDPA 精度一致，可用 PA 享低延迟 |
+| **iGPU · cpu_routing 类任务（要 INT4 体积）** | **Qwen3.5-2B `INT4 g128 +AWQ(mixed)+r0.8`** | cpu 82.8（+31 vs 纯 g128），CLINC/BANKING 仅降 ~1pp，1.3G≈纯 4-bit（§8.5）。cpu 用 SDPA |
+| **iGPU · cpu_routing 类任务（要极致精度）** | **Qwen3.5-2B FP16 或 INT8 + SDPA** | FP16 93.1 / INT8 75.9。**必须 SDPA**（PA 把 FP16 打到 60）。代价：SDPA TTFT ~5×、体积大 |
 | **iGPU · 小模型 · 精度优先** | **Qwen3-1.7B INT8** | CLINC 67.9%（=FP16），TTFT 192ms（iGPU 上最低），TPOT 19.7ms。iGPU 上 INT8 不慢 |
 | **iGPU · 小模型 · 吞吐/长文本优先** | **Qwen3-1.7B INT4-g128+AWQ** | TPOT 13.6ms/71 tok/s（最高吞吐），CLINC 54.0%（纯 4-bit 上限） |
 | **NPU · 大规模分类** | **Qwen3-1.7B INT4 g128sym+AWQ** | CLINC 59.8/BANK 57.4，TTFT 401ms、TPOT 17.9ms（NPU 4-bit 最优）。**绝不用 INT8**（TTFT 711/TPOT 407） |
 | **NPU · 小/特异任务** | **Qwen3-1.7B INT4 g128sym r0.8** | cpu_routing 65.5%（AWQ 会把小任务带偏），TTFT 413ms |
 
-> 对**分类器**（1 token 输出）而言：延迟即 TTFT。短 prompt 下 4-bit 首字更快、1k prompt 下 INT8 首字更快，两者都够用；**最终由精度定夺**——iGPU 首选 2B INT4-g128；小模型精度优先选 1.7B INT8，吞吐优先选 1.7B INT4-g128+AWQ；NPU 选 1.7B g128sym+AWQ。
+> 对**分类器**（1 token 输出）而言：延迟即 TTFT。**先按任务定量化+后端**：CLINC/BANKING 类可用 2B INT4-g128（PA 安全、快）；cpu_routing 类精度极依赖量化，需 2B FP16/INT8 且必须 SDPA。小模型精度优先选 1.7B INT8、吞吐优先选 1.7B INT4-g128+AWQ；NPU 选 1.7B g128sym+AWQ（1.7B 全部不受 PA bug 影响）。
 
 ---
 
@@ -235,6 +254,7 @@ python plot_confusion.py    # -> confusion_matrices/*.png + 逐类召回表
 读图要点：
 - **激进 INT4 柱最矮**（NPU 上 CLINC 几乎贴地——垃圾 token），是所有配置里最差的一档。
 - **g128 系列显著抬升**；2B 的 g128 柱几乎顶到 FP16 虚线（CLINC），1.7B 的 g128 柱明显还有缺口，**加 AWQ 后再抬一截**。
+- **2B 的 cpu_routing 面板例外**（已用 SDPA 修正）：FP16 柱高达 93、INT4-g128 只 52，量化落差巨大——cpu_routing 对量化远比 CLINC/BANKING 敏感（见 §8）。
 - NPU 三根可用 4-bit 柱（g128sym / r0.8 / AWQ）里，**AWQ 在 CLINC/BANKING 最高**，但 **cpu_routing 上 AWQ 反而塌**（见 §5.8 成因）。
 
 ### 4.2 延迟对比（CLINC 暖态 p50）
@@ -254,10 +274,10 @@ python plot_confusion.py    # -> confusion_matrices/*.png + 逐类召回表
 ## 5. 逐量化类型分析：与文档/FP16 差异的成因
 
 ### 5.1 FP16（参考天花板）
-CLINC 78.0%(2B)/67.6%(1.7B)、BANKING 72.9%/57.9% —— **CLINC/BANKING 精确复现历史文档**（≈78/≈73），证明评测链路无误。唯一「差异」在 cpu_routing（见 §9）。
+CLINC 78.0%(2B)/67.6%(1.7B)、BANKING 72.9%/57.9%、**cpu_routing 93.1%(2B, SDPA)/69.0%(1.7B)** —— 三个任务均**精确复现历史文档**（CLINC≈78、BANKING≈73、cpu_routing≈93），证明评测链路无误。（2B cpu_routing 93.1 必须用 SDPA；PA 会打到 60.3，见 §8。）
 
 ### 5.2 INT8 —— 精度对标 FP16，延迟「NPU 崩、iGPU 可用」
-各任务与 FP16 相差 ≤2pp（个别更高，如 2B cpu 60.3→69.0 属小集合方差）。**延迟结论按设备分裂**（详见 §3.5）：
+CLINC/BANKING 与 FP16 相差 ≤2pp；**cpu_routing 上有量化损失**（2B FP16 93.1→INT8 75.9；1.7B 69.0→70.7 基本持平）。**延迟结论按设备分裂**（详见 §3.5）：
 - **NPU：INT8 不可用**——TTFT 711ms、**TPOT 407ms/token（吞吐仅 2.5 tok/s）**，512 token 需 ~208 秒。NPU 快路径只对 INT4 权重优化，INT8 掉出快路径。
 - **iGPU：INT8 可用且不慢**——TTFT 192ms（1.7B，甚至低于 INT4-g128）、TPOT ~20ms。以 FP16 级精度换 ~2.5× FP16 的 decode 速度。
 - 故 INT8 在 **iGPU 上是 1.7B 精度优先场景的合理生产选择**；只有在 **NPU 上才因延迟被否决**。
@@ -267,9 +287,10 @@ CLINC 78.0%(2B)/67.6%(1.7B)、BANKING 72.9%/57.9% —— **CLINC/BANKING 精确�
 - **小模型更惨**（冗余少）：2B CLINC 掉到 52%，1.7B 掉到 19.9%（GPU）/1.5%（NPU，91% 垃圾 token）。
 - 结论：这是「性能远低于文档」的**直接元凶**，务必弃用。
 
-### 5.4 INT4 g128（非对称，GPU）—— 2B 达标、1.7B 不够
+### 5.4 INT4 g128（非对称，GPU）—— 2B 在 CLINC/BANKING 达标，但 cpu_routing 塌
 - 每 128 权重一组独立 scale+zero-point → 恢复动态范围。
-- **2B**：CLINC 52%→**75.7%**、BANKING 45%→**70.2%**，≈FP16、纯 4-bit。**2B 到此即可**。
+- **2B（CLINC/BANKING）**：CLINC 52%→**75.7%**、BANKING 45%→**70.2%**，≈FP16、纯 4-bit。**这两个任务 2B 到此即可**。
+- **2B（cpu_routing）例外**：**仅 51.7%，远低于 FP16 93.1（SDPA）**——cpu_routing 对量化极敏感，「INT4-g128≈FP16」在此任务不成立。要 cpu_routing 贴 FP16 需 INT8(75.9) 或 FP16。
 - **1.7B**：CLINC 只到 44.9% —— 小模型仅靠分组还差 ~23pp，需再上 AWQ。
 
 ### 5.5 INT4 g128+AWQ（非对称，数据感知，1.7B GPU）—— 小模型的关键补丁
@@ -296,44 +317,117 @@ CLINC 78.0%(2B)/67.6%(1.7B)、BANKING 72.9%/57.9% —— **CLINC/BANKING 精确�
 
 | 模型 / 设备 | 达到/接近 FP16 的 INT4 配方 | 效果 | 是否纯 4-bit |
 |---|---|---|---|
-| **Qwen3.5-2B / iGPU·dGPU** | `INT4 g128 非对称` | CLINC 75.7 vs FP16 78（−2.3pp），BANKING 70.2 vs 72.9 | ✅ 纯 4-bit |
+| **Qwen3.5-2B / iGPU·dGPU（CLINC/BANKING）** | `INT4 g128 非对称` | CLINC 75.7 vs FP16 78（−2.3pp），BANKING 70.2 vs 72.9 | ✅ 纯 4-bit |
+| **Qwen3.5-2B / iGPU·dGPU（含中文 cpu_routing）** | `INT4 g128 + AWQ(混合校准) + ratio0.8` | **cpu 82.8 vs 93.1、CLINC 74.3、BANKING 69.2**（三任务均值 75.4≈INT8） | ◑ 80% 4-bit+20% INT8（1.3G） |
 | **Qwen3-1.7B / iGPU·dGPU** | `INT4 g128 + AWQ 非对称` | CLINC 54.0 vs 67.6，BANKING 55.1 vs 57.9（BANKING 近平） | ✅ 纯 4-bit |
 | **Qwen3-1.7B / NPU（大任务）** | `INT4 g128sym + AWQ` | CLINC 59.8 vs 67.6，**BANKING 57.4 vs 57.9（几乎无损）** | ✅ 纯 4-bit |
 | **Qwen3-1.7B / NPU（小/特异任务）** | `INT4 g128sym + ratio=0.8` | **cpu_routing 65.5 vs 69.0** | 多为 4-bit |
 
 **要点**：
-- 模型越大越容易靠 4-bit 恢复：**2B 只需 g128**；**1.7B 必须叠 AWQ / 混合精度**。
-- **纯 4-bit 无法在 1.7B 的 CLINC 上完全追平 FP16**（最好 54 vs 67.6，差 ~13pp）；BANKING 可近平。若要 CLINC 也追平，只有 INT8（67.9，但 TTFT 高）或换 2B。
-- 决定性动作永远是**先把 `g=-1` 换成 `g128`**；这一步就拿回大部分精度且 TTFT 不变。
+- 模型越大越容易靠 4-bit 恢复：**2B 在 CLINC/BANKING 只需 g128**；**1.7B 必须叠 AWQ / 混合精度**。
+- **cpu_routing（中文）是量化敏感的例外**：2B 纯 g128 只 51.7（FP16 93.1）。**用中文/混合语料 AWQ + 20% INT8 混合精度**可把它救到 **82.8**，且 CLINC/BANKING 仅降 ~1pp、体积仍近纯 4-bit（详见 §8.5）——这是跨中英三任务最均衡的 INT4 方案。
+- **纯 4-bit 无法在 1.7B 的 CLINC 上完全追平 FP16**（最好 54 vs 67.6）；BANKING 可近平。若要更高只有 INT8 或换 2B。
+- 决定性动作：**先把 `g=-1` 换成 `g128`**（拿回大部分精度、TTFT 不变）；跨语言任务再叠 **数据感知 AWQ（校准语料需覆盖目标语言）+ 混合精度**。
 
 ---
 
 ## 7. 结论二：要达到 / 接近文档记录的性能，应怎么做
 
-1. **CLINC / BANKING 的文档值已达成**：FP16 精确复现（78/73），**2B 的 INT4-g128 也已逼近**（75.7/70.2）。生产用 2B + INT4-g128 即可对标文档且享 INT4 TTFT。
-2. **cpu_routing 的历史 ~93% 在当前 `eval_set` 上不可达**（见 §9）——这是数据集被加难，而非量化或流水线问题。当前集合上：
-   - 最佳实测为 **INT8/1.7B 的 70.7%**、FP16/1.7B 69.0%；2B FP16 60.3%。
-   - 若必须提高该指标：优先**换更大模型**或**放宽到 local/cloud 二分**（2B 二分 81%），并把文档 93% 标注为「历史/旧集合」。
-3. **设备选择**：追求最低 TTFT 用 **dGPU（10–28ms）**；NPU 适合功耗受限场景但需对称量化 + 上述配方；iGPU 居中。
-4. **不要用**仓库默认的激进 INT4——它是文档差距的主因。
+1. **CLINC / BANKING 的文档值已达成**：FP16 精确复现（78/73），**2B 的 INT4-g128 也已逼近**（75.7/70.2）。这两个任务上生产用 2B + INT4-g128 即可对标文档且享 INT4 TTFT。
+2. **cpu_routing 的文档 ~93% 是真实可达的**——用 **Qwen3.5-2B FP16 + SDPA = 93.1%**（此前测得 60.3% 是 PA bug，已修正，见 §8）。但要注意：
+   - **cpu_routing 对量化极敏感（与 CLINC/BANKING 不同）**：2B 上 FP16 93.1 → INT8 75.9 → **INT4-g128 仅 51.7**（−41pp！）→ 激进 INT4 34.5。即「INT4-g128 ≈ FP16」**只在 CLINC/BANKING 成立，cpu_routing 不成立**。
+   - 故 **cpu_routing 若要贴近 93%，必须用 2B 的 FP16（或退一步 INT8 75.9），不能用 INT4**；且 2B 必须走 **SDPA**（PA 会把 FP16 打回 60）。
+   - 1.7B 上 cpu_routing 天花板较低（FP16 69.0），2B 明显更强（93.1）。
+3. **设备选择**：追求最低 TTFT 用 **dGPU**；NPU 适合功耗受限但需对称量化；iGPU 居中。**2B-VLM 在 GPU 上注意 PA/SDPA（§8）**。
+4. **不要用**仓库默认的激进 INT4。
 
 ---
 
-## 8. FP16 为何达不到文档 cpu_routing ~93%（诊断复述）
+## 8. 关键订正：`ATTENTION_BACKEND=PA` 在 2B-VLM 上的精度 bug（替换原「分析 B」）
 
-**结论：`eval_set` 本身很难，不是流水线问题。**
-- **证据 1（链路正确）**：FP16-2B 在 CLINC=78.0%、BANKING=72.9%，与文档 78/73 精确吻合。
-- **证据 2（数据集变难）**：`eval_set` 的 `correct_by` 字段显示历史答对率——14B=83%、32B=72%、70B=95%；逐类可解率 A=100/B=100/**C=53**/D=88。C「发现型」类连大模型平均也只 53%，2B 不可能到 93%（要同时超 14B 并逼近 70B）。FP16-2B 实测 C 召回 57%，**恰贴历史 53% 天花板**。
-- **证据 3（非 thinking 之功）**：开 thinking 反而更差（1-token 73%→thinking 33%）。
-- **证据 4（二分口径）**：只看 local/cloud 二分，FP16-2B 为 81.0%，仍达不到 93%。
-- **推断**：文档 93% 最可能来自更早/更简单版本的 `eval_set` 或不同口径/更大模型。当前 58 条 4 类集合 FP16 上限约 60%(4 类)/81%(二分)。
+> 本节**替换并撤回**早期版本的「分析 B：FP16 达不到 93% 是 eval_set 太难」。那个结论**是错的**，其根因是下面这个 PA bug。感谢用户手动切到 SDPA 复现出 93.1% 才定位到。
+
+### 8.1 现象
+同一模型（Qwen3.5-2B-FP16）、同一设备（GPU.0）、同一 prompt、同一 eval_set，仅注意力后端不同：
+
+| backend | cpu_routing acc | 逐条 p50 | 说明 |
+|---|---:|---:|---|
+| **PA**（PagedAttention，旧默认） | **60.3%** | 66ms | 快，但**结果错** |
+| **SDPA**（现默认） | **93.1%** | 322ms | 慢 ~5×，**结果正确**，与文档 93% 吻合 |
+
+junyu 版评测器用 optimum `OVModelForVisualCausalLM`（走 SDPA 式注意力），所以一直是正确的 93.1%；handoff 版曾自动注入 PA，故得到 60.3%。（注：空配置 `{}` 在 genai GPU 管线里**默认也走 PA**，必须显式设 SDPA 才切换——这也是我一度误判「PA 不是主因」的原因。）
+
+### 8.2 范围（已用实验界定，非全面污染）
+
+| 模型 / 管线 | 任务 | PA | SDPA | 结论 |
+|---|---|---:|---:|---|
+| Qwen3.5-2B / **VLM** | **cpu_routing** | 60.3 | **93.1** | **PA 坏（−33pp）** |
+| Qwen3.5-2B / VLM | CLINC | 78.0 | 78.1 | 一致 |
+| Qwen3.5-2B / VLM | BANKING | 72.9 | 72.9 | 一致 |
+| Qwen3-1.7B / **LLM** | cpu_routing | 69.0 | 69.0 | 一致 |
+| Qwen3-1.7B / LLM | CLINC | 67.6 | 67.6 | 一致 |
+
+**bug 仅出现在 `VLMPipeline + cpu_routing`；LLMPipeline 全部一致，2B 的 CLINC/BANKING 也一致。**
+
+### 8.3 量级随精度缩放（2B, cpu_routing, PA→SDPA）
+
+| 量化 | PA | SDPA | Δ |
+|---|---:|---:|---:|
+| FP16 | 60.3 | **93.1** | **+32.8** |
+| INT8 | 69.0 | 75.9 | +6.9 |
+| INT4-g128 | 51.7 | 51.7 | 0 |
+| INT4 激进 | 37.9 | 34.5 | −3.4（噪声） |
+
+PA 引入的注意力数值误差对**高精度模型（FP16）在此任务上是灾难性的**；INT4 本已被量化压到 ~52% 以下，PA 的额外误差被淹没，故 INT4 变体几乎不受影响（也因此**推荐的 2B INT4-g128 在 PA 下仍安全**）。
+
+### 8.4 结论与处置
+- **根因**：本 OV 构建里 VLM 管线的 PA 路径存在正确性问题（疑与 Qwen3.5 hybrid/Gated-DeltaNet 注意力在 paged 实现下的掩码/位置处理有关），且对 cpu_routing 这类 prompt 触发。
+- **已处置**：`pipe_config.py` GPU 默认改回 **SDPA**（correctness-first）；docstring 里原「PA byte-exact lossless」的错误说明已更正。
+- **权衡**：PA 对 **LLM（1.7B）正确且更快**，可作为显式 opt-in（`--pipe-config ATTENTION_BACKEND=PA`）；2B-VLM 仅在 CLINC/BANKING 类任务、或按具体任务验证后才可用 PA。
+- **对本报告的影响**：仅 2B×cpu_routing 的精度需修正（已改）；1.7B 全部、2B 的 CLINC/BANKING 均不受影响；2B 的延迟数据为 PA 口径，SDPA 安全路径 ~5× 慢。
+
+---
+
+## 8.5 补充实验：中文/混合校准 AWQ 大幅改善 2B 的 INT4 cpu_routing
+
+**动机**：cpu_routing 是**中文**四类路由，而 CLINC/BANKING 是**英文**；此前 AWQ 校准集用的是英文 wikitext-2，可能没保护好中文任务重要的通道。§8 已表明 2B 上 INT4-g128 的 cpu_routing 只有 51.7（FP16=93.1），量化落差巨大。这里用**通用中文/混合语料**（非任务自身提示词）做数据感知量化，看能否在**不明显牺牲英文两任务**的前提下把 cpu_routing 救回来。
+
+**方法**：optimum 的 `OVModelForVisualCausalLM` 只接受**预定义 image-text 校准集**、不收自定义文本，故改用 **NNCF 直接量化语言模型**（`requant_nncf_vlm.py`：先用 `text_embeddings` 预算 `inputs_embeds` 再对 `language_model` 做 AWQ）。校准语料：
+- `data/zh_calib.txt`：256 条中文维基（hf-mirror 拉取，通用文本）；
+- `data/mixed_calib.txt`：128 中文 + 128 英文 交错。
+- 均为 **g128 非对称**（2B 仅 GPU）。评测：cpu_routing 用 **SDPA**，CLINC/BANKING 用 PA（已验证 PA==SDPA、快 ~5×）。
+
+**结果（Qwen3.5-2B，INT4-g128 系列 + 参考）**：
+
+| 变体 | 方法 | cpu_routing(zh) | CLINC(en) | BANKING(en) | 三任务均值 | LM 大小 |
+|---|---|---:|---:|---:|---:|---:|
+| FP16 | 参考天花板 | 93.1 | 78.0 | 72.9 | 81.3 | 3.6G |
+| INT8 | 8-bit（TTFT 高） | 75.9 | 76.2 | 72.1 | 74.7 | 1.8G |
+| INT4 g128 | 原纯 4-bit | 51.7 | 75.7 | 70.2 | 65.9 | 1.2G |
+| INT4 g128 +AWQ **zh** | AWQ 中文校准 | 67.2 | 75.8 | **63.3** | 68.8 | 1.2G |
+| INT4 g128 +AWQ **mixed** | AWQ 混合校准 | 65.5 | 72.4 | 66.6 | 68.2 | 1.2G |
+| INT4 g128 **r0.8**（无 AWQ） | 数据无关混合精度 | 55.2 | **77.4** | **73.8** | 68.8 | 1.3G |
+| **INT4 g128 +AWQ mixed +r0.8 ★** | AWQ+20% INT8 | **82.8** | 74.3 | 69.2 | **75.4** | 1.3G |
+
+（Δ vs 原纯 g128：+AWQ zh = **+15.5** / +0.1 / −6.9；+AWQ mixed = +13.8 / −3.3 / −3.6；r0.8 = +3.5 / +1.7 / +3.6；**AWQ mixed+r0.8 = +31.1 / −1.4 / −1.0**）
+
+**结论**：
+1. **AWQ（含中文/混合校准）确实能救回 cpu_routing**：纯 AWQ（ratio 1.0）把 cpu 从 51.7 抬到 65–67，但会拿英文两任务换（CLINC/BANKING 掉 3–7pp，**zh-only 校准对 BANKING 伤害最大 −6.9**，说明只用中文会过拟合、拖累英文）。
+2. **数据无关混合精度（r0.8，无 AWQ）**：对英文微升（CLINC 77.4/BANKING 73.8，甚至超原 g128），但对 cpu 几乎无用（55.2）——**mixed precision 只护住"高敏感层"，救不了中文的表示缺口，需要 AWQ 的数据感知**。
+3. **最佳解 = AWQ（混合校准）+ ratio 0.8 混合精度**（★）：**cpu_routing 51.7→82.8（+31，逼近 FP16 93）**，同时 **CLINC/BANKING 仅各降 ~1pp**。三任务均值 **75.4，追平 INT8（74.7）**，而模型仍是 **1.3G（≈纯 4-bit，远小于 INT8 1.8G）**——即 **"INT4 的体积/TTFT + 接近 INT8 的三任务均衡精度"**。逐类召回 A 84/B 65/C 93/D 100，均衡恢复。
+4. 直接回答提问：**是**，对 2B 做中文/混合 AWQ 能显著改善（尤其叠加 20% INT8 混合精度）；**要三个数据集都不明显掉的最佳 INT4 方案就是 `AWQ(mixed) + g128 + ratio0.8`**。
+
+**产物**：模型 `benchmark/models/Qwen3.5-2B-INT4-g128-awqmix-r08`（及 awqzh/awqmix/r08）；脚本 `requant_nncf_vlm.py`；校准集 `data/zh_calib.txt`、`data/mixed_calib.txt`；图 `charts/awq_2b_calibration.png`。
+
+![2B AWQ 校准实验](../charts/awq_2b_calibration.png)
 
 ---
 
 ## 9. 建议
 
-1. **iGPU/dGPU + Qwen3.5-2B**：用 `INT4 g128 非对称`——零延迟代价逼近 FP16，直接升级。
-2. **iGPU/dGPU + Qwen3-1.7B**：用 `INT4 g128 + AWQ 非对称`——小模型的最佳纯 4-bit。
+0. **🔴 GPU 用 SDPA 注意力后端（勿用 PA on 2B-VLM）**：PA 会把 2B-VLM 的 cpu_routing 从 93.1% 打到 60.3%（§8）。`pipe_config.py` 已默认 SDPA。PA 仅对 1.7B-LLM 正确且更快，可显式 opt-in。
+1. **iGPU/dGPU + Qwen3.5-2B**：**CLINC/BANKING 类任务**用 `INT4 g128 非对称`（≈FP16，享 INT4 TTFT）；**含中文 cpu_routing 的场景**用 `INT4 g128 + AWQ(混合校准) + ratio0.8`（cpu 82.8、三任务均衡、仍 1.3G，见 §8.5）；要极致 cpu 精度才上 FP16/INT8。所有 2B 评测/部署用 **SDPA**（PA 有 cpu_routing bug）。
+2. **iGPU/dGPU + Qwen3-1.7B**：用 `INT4 g128 + AWQ 非对称`——小模型的最佳纯 4-bit（CLINC/BANKING）；cpu_routing 精度优先则用 INT8。
 3. **NPU + Qwen3-1.7B**：大规模分类用 `g128sym + AWQ`（BANKING 近无损）；小/特异任务用 `g128sym + ratio=0.8`（cpu_routing 最稳）。可两者都导出，按任务选。
 4. **弃用**仓库默认 `INT4 g=-1 对称 ratio=1`（GPU 掉 20–48pp，NPU 出垃圾 token）。
 5. **INT8 分设备用**：**NPU 上禁用**（TTFT 711/TPOT 407ms，见 §3.5）；**iGPU 上可用**——1.7B 精度优先时 INT8（CLINC 67.9、TTFT 192、TPOT 20ms）优于纯 4-bit。
@@ -348,7 +442,8 @@ CLINC 78.0%(2B)/67.6%(1.7B)、BANKING 72.9%/57.9% —— **CLINC/BANKING 精确�
 - **性能压测结果**：`perf_results/perf.json`（14 单元 TTFT/TPOT/TPS 全分位）、`perf_results/perf.csv`、`perf_results/logs/*.log`
 - 准确率图表：`charts/acc_*.png`、`charts/lat_*.png`、`charts/summary_table.md`
 - **性能图表**：`charts/perf_ttft_*.png`（TTFT/TPOT/吞吐）、`charts/perf_tradeoff_*.png`（TTFT×accuracy 决策散点）、`charts/perf_summary.md`
+- **AWQ 校准实验（§8.5）**：图 `charts/awq_2b_calibration.png`；模型 `benchmark/models/Qwen3.5-2B-INT4-g128-{awqzh,awqmix,awqmix-r08,r08}`
 - 混淆矩阵：`confusion_matrices/*.png`（69 张）+ 逐类召回表（`plot_confusion.py` stdout）
-- 脚本：`run_all_sequential.sh`（准确率全量串行）、`run_campaign.sh`（单组合）、**`run_perf.sh`（性能压测串行）**、`requant_aware.py`（数据感知量化）、`make_charts.py`、**`make_perf_charts.py`**、`plot_confusion.py`、`pipe_config.py`（设备配置）
+- 脚本：`run_all_sequential.sh`（准确率全量串行）、`run_campaign.sh`（单组合）、`run_perf.sh`（性能压测串行）、`requant_aware.py`（1.7B 数据感知量化）、**`requant_nncf_vlm.py`（2B VLM 的 NNCF AWQ，支持自定义中文/混合校准）**、`make_charts.py`、`make_perf_charts.py`、**`make_awq_chart.py`**、`plot_confusion.py`、`pipe_config.py`（设备配置）
 - 性能配置：`benchmark/tests/repro_rerun_20260710/gpu_pa.json`（iGPU PA）、`npu_best_perf_turbo.json`（NPU turbo）；提示词 `model_bench/prompts/qwen3_1k.jsonl` / `qwen3.5_1k.jsonl`
-- 校准集：`data/wikitext2_calib.txt`（通用 wikitext-2，256 条）
+- 校准集：`data/wikitext2_calib.txt`（英文 256）、**`data/zh_calib.txt`（中文维基 256）、`data/mixed_calib.txt`（中英混合 256）**

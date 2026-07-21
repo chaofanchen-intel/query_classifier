@@ -1,14 +1,21 @@
-"""Device pipeline configs matching the validated Qwen3/Qwen3.5 optimization setup
+"""Device pipeline configs for the Qwen3/Qwen3.5 evaluation setup
 (see benchmark/tests/Qwen3_Qwen3.5_优化说明与测试数据_统一版_20260711.md).
 
-  - iGPU/GPU : ATTENTION_BACKEND=PA  (PagedAttention; Qwen3.5 hybrid Gated-DeltaNet
-               path. opt-3/5/6 on top are byte-exact lossless.)
-  - NPU      : NPU_TURBO=YES (byte-exact lossless, -4~7% TTFT) + the NPUW baseline
-               (MAX_PROMPT_LEN / MIN_RESPONSE_LEN / prefill chunk). We deliberately do
-               NOT set NPUW_LLM_GENERATE_HINT=BEST_PERF: it changes outputs on 0.6B/1.7B.
+  - GPU : ATTENTION_BACKEND=SDPA  (correctness-first default; see WARNING below)
+  - NPU : NPU_TURBO=YES + the NPUW baseline (MAX_PROMPT_LEN / MIN_RESPONSE_LEN /
+          prefill chunk). We deliberately do NOT set NPUW_LLM_GENERATE_HINT=BEST_PERF
+          for accuracy runs: it changes outputs on 0.6B/1.7B.
 
-These are performance/back-end switches proven md5-lossless, so they should not change
-accuracy; the NPU length params also make the static NPU pipeline behave correctly.
+  ⚠️  WARNING — ATTENTION_BACKEND=PA is NOT lossless (2026-07-20).
+  PagedAttention (PA) is faster (~5x lower TTFT on the 2B VLM at short prompts) and
+  is accuracy-EQUAL to SDPA for the LLMPipeline (Qwen3-1.7B: PA==SDPA on all tasks)
+  and for the VLMPipeline on CLINC/BANKING. BUT it SILENTLY corrupts the
+  Qwen3.5-2B VLMPipeline on the cpu_routing task: FP16 cpu_routing drops 93.1%
+  (SDPA, correct) -> 60.3% (PA). The error scales with precision (FP16 worst, INT4
+  negligible). Root cause: a correctness issue in the PA path of the VLM pipeline on
+  this OV build. Therefore we default GPU to SDPA. PA remains a valid opt-in latency
+  optimization for the LLM (`--pipe-config ATTENTION_BACKEND=PA`), or for the VLM only
+  after validating your specific task. NPU_TURBO / NPUW length params ARE lossless.
 """
 from __future__ import annotations
 
@@ -32,7 +39,7 @@ def build_pipe_config(device: str, extra=None, auto: bool = True) -> dict:
                 "NPUW_LLM_PREFILL_CHUNK_SIZE": 2048,
             })
         elif dev.startswith("GPU"):
-            cfg.update({"ATTENTION_BACKEND": "PA"})
+            cfg.update({"ATTENTION_BACKEND": "SDPA"})
     for kv in (extra or []):
         k, v = kv.split("=", 1)
         cfg[k] = _coerce(v)

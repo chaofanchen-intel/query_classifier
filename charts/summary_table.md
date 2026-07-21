@@ -1,8 +1,8 @@
 | family | quant | device | task | acc | p50 ms | N |
 |---|---|---|---|---:|---:|---:|
 | Qwen3-1.7B | FP16 | iGPU | banking_cluster10 | 57.9% | 55.048572000032436 | 3080 |
-| Qwen3-1.7B | FP16 | iGPU | clinc | 67.6% | 51.82415299987042 | 4500 |
-| Qwen3-1.7B | FP16 | iGPU | cpu_routing | 69.0% | 54.27727200003574 | 58 |
+| Qwen3-1.7B | FP16 | iGPU | clinc | 67.6% | 93.3202289743349 | 4500 |
+| Qwen3-1.7B | FP16 | iGPU | cpu_routing | 69.0% | 146.4006759924814 | 58 |
 | Qwen3-1.7B | FP16 | dGPU | banking_cluster10 | 57.9% | 10.497193999981391 | 3080 |
 | Qwen3-1.7B | FP16 | dGPU | clinc | 67.6% | 10.425367999971513 | 4500 |
 | Qwen3-1.7B | FP16 | dGPU | cpu_routing | 69.0% | 11.243533000026673 | 58 |
@@ -45,27 +45,27 @@
 | Qwen3-1.7B | INT8 | NPU | banking_cluster10 | 58.3% | 670.842165999602 | 3080 |
 | Qwen3-1.7B | INT8 | NPU | clinc | 67.3% | 670.0916199999938 | 4500 |
 | Qwen3-1.7B | INT8 | NPU | cpu_routing | 70.7% | 672.1622640000078 | 58 |
-| Qwen3.5-2B | FP16 | iGPU | banking_cluster10 | 72.9% | 66.86543199998596 | 3080 |
-| Qwen3.5-2B | FP16 | iGPU | clinc | 78.0% | 70.09825199997977 | 4500 |
-| Qwen3.5-2B | FP16 | iGPU | cpu_routing | 60.3% | 66.84065699994335 | 58 |
+| Qwen3.5-2B | FP16 | iGPU | banking_cluster10 | 72.9% | 325.9182169858832 | 3080 |
+| Qwen3.5-2B | FP16 | iGPU | clinc | 78.1% | 419.0464860002976 | 4500 |
+| Qwen3.5-2B | FP16 | iGPU | cpu_routing | 93.1% | 308.5646459949203 | 58 |
 | Qwen3.5-2B | FP16 | dGPU | banking_cluster10 | 72.9% | 19.437147999724402 | 3080 |
 | Qwen3.5-2B | FP16 | dGPU | clinc | 78.0% | 20.803173000103925 | 4500 |
 | Qwen3.5-2B | FP16 | dGPU | cpu_routing | 60.3% | 20.243964999963282 | 58 |
 | Qwen3.5-2B | INT4 aggressive | iGPU | banking_cluster10 | 45.4% | 27.817473999903086 | 3080 |
 | Qwen3.5-2B | INT4 aggressive | iGPU | clinc | 52.1% | 34.736833000124534 | 4500 |
-| Qwen3.5-2B | INT4 aggressive | iGPU | cpu_routing | 37.9% | 28.20624600008159 | 58 |
+| Qwen3.5-2B | INT4 aggressive | iGPU | cpu_routing | 34.5% | 252.59225998888724 | 58 |
 | Qwen3.5-2B | INT4 aggressive | dGPU | banking_cluster10 | 45.9% | 21.81732400003966 | 3080 |
 | Qwen3.5-2B | INT4 aggressive | dGPU | clinc | 52.8% | 25.17436399966755 | 4500 |
 | Qwen3.5-2B | INT4 aggressive | dGPU | cpu_routing | 37.9% | 22.324431000015466 | 58 |
 | Qwen3.5-2B | INT4 g128 | iGPU | banking_cluster10 | 70.2% | 30.821383999864338 | 3080 |
 | Qwen3.5-2B | INT4 g128 | iGPU | clinc | 75.7% | 39.62986200008345 | 4500 |
-| Qwen3.5-2B | INT4 g128 | iGPU | cpu_routing | 51.7% | 31.455945000061547 | 58 |
+| Qwen3.5-2B | INT4 g128 | iGPU | cpu_routing | 51.7% | 278.6773410043679 | 58 |
 | Qwen3.5-2B | INT4 g128 | dGPU | banking_cluster10 | 70.3% | 24.176761000035185 | 3080 |
 | Qwen3.5-2B | INT4 g128 | dGPU | clinc | 75.6% | 28.20283199980622 | 4500 |
 | Qwen3.5-2B | INT4 g128 | dGPU | cpu_routing | 51.7% | 25.55140599997685 | 58 |
 | Qwen3.5-2B | INT8 | iGPU | banking_cluster10 | 72.1% | 35.678769000014654 | 3080 |
 | Qwen3.5-2B | INT8 | iGPU | clinc | 76.2% | 40.627888000017265 | 4500 |
-| Qwen3.5-2B | INT8 | iGPU | cpu_routing | 69.0% | 39.486559000124544 | 58 |
+| Qwen3.5-2B | INT8 | iGPU | cpu_routing | 75.9% | 265.9565320063848 | 58 |
 | Qwen3.5-2B | INT8 | dGPU | banking_cluster10 | 72.2% | 23.781599999892933 | 3080 |
 | Qwen3.5-2B | INT8 | dGPU | clinc | 76.0% | 27.587497999775223 | 4500 |
 | Qwen3.5-2B | INT8 | dGPU | cpu_routing | 67.2% | 25.581161999980395 | 58 |

@@ -51,8 +51,11 @@ def family_of(model):
 
 def load():
     # cell[(family, quant, device, task)] = {acc, p50, n}
+    # Iterate files in filename (timestamp) order so that on equal-N ties the
+    # NEWEST run wins — important for GPU cpu_routing where later SDPA re-runs
+    # supersede earlier PA runs (PA has an accuracy bug on the 2B VLM, see report §8).
     cell = {}
-    for f in glob.glob(str(RES / "*.json")):
+    for f in sorted(glob.glob(str(RES / "*.json"))):
         try: d = json.load(open(f))
         except Exception: continue
         model = d.get("model", ""); dev = d.get("device", "")
@@ -62,8 +65,8 @@ def load():
         n = d.get("samples", 0)
         p50 = (d.get("latency_ms") or {}).get("p50")
         k = (fam, q, dev, task)
-        # keep the largest-N run per cell (full over --limit)
-        if k not in cell or n > cell[k]["n"]:
+        # keep the largest-N run per cell; on ties keep the newest (>= + sorted order)
+        if k not in cell or n >= cell[k]["n"]:
             cell[k] = {"acc": d.get("accuracy"), "p50": p50, "n": n}
     return cell
 

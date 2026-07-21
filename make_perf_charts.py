@@ -48,15 +48,16 @@ def load_perf():
     return P
 
 def load_acc():
+    # sorted() + >= so newest run wins on equal-N ties (SDPA re-runs supersede PA; see report §8)
     acc = defaultdict(dict); best = {}
-    for f in glob.glob(str(EXP/"results"/"*.json")):
+    for f in sorted(glob.glob(str(EXP/"results"/"*.json"))):
         try: d = json.load(open(f))
         except: continue
         m = d.get("model","").rstrip("/").split("/")[-1]; dev = d.get("device","")
         if dev not in ("GPU.0","GPU.1","NPU"): continue
         t = d.get("dataset","cpu_routing"); n = d.get("samples",0)
         k = (fam(m), qof(m), dev, t)
-        if k not in best or n > best[k]:
+        if k not in best or n >= best[k]:
             best[k] = n; acc[(fam(m), qof(m), dev)][t] = d.get("accuracy")
     return acc
 

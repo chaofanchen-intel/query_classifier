@@ -154,18 +154,28 @@ python plot_confusion.py
 3. **prompt 影响很大**：换模型后建议在小样本（`--limit`）上先调 prompt 再跑全量。
 4. **量化配置对准确率影响极大（2026-07-15 实测）**：`INT4 group_size=-1 逐通道对称`（激进）会大掉 20–25pp，NPU 上甚至输出垃圾 token。请用 `INT4 group_size=128`（iGPU 用非对称，NPU 因硬件要求对称需配 `--ratio 0.8` 混合精度）。详见 [reports/REPORT_Qwen3-1.7B-NPU_Qwen3.5-2B-iGPU.md](reports/REPORT_Qwen3-1.7B-NPU_Qwen3.5-2B-iGPU.md)。
 5. **NPU 需要对称量化**：非对称 INT4 在 NPU 编译失败（`ZE_RESULT_ERROR_INVALID_ARGUMENT`）。NPU 运行还需 `NPU_TURBO=YES` + `MAX_PROMPT_LEN`/`MIN_RESPONSE_LEN`/`NPUW_LLM_PREFILL_CHUNK_SIZE`（脚本按设备自动注入，见 `pipe_config.py`）。
+6. **🔴 GPU 用 SDPA，勿用 PA on 2B-VLM（2026-07-20）**：`ATTENTION_BACKEND=PA` 会**静默**把 Qwen3.5-2B（VLMPipeline）在 cpu_routing 上的精度从 **93.1%（SDPA）打到 60.3%**。范围仅 2B-VLM×cpu_routing（CLINC/BANKING 及全部 1.7B-LLM 的 PA/SDPA 一致）。`pipe_config.py` 已默认 SDPA；PA 仅对 1.7B-LLM 正确且更快，可显式 opt-in。详见报告 §8。
 
 ## 10. 参考准确率
 
-> ⚠️ **2026-07-15 修正**：cpu_routing 的历史 ~93% **在当前 `eval_set` 上复现不出来**——即便 FP16 也只有 ~60%（4 类）。原因是当前 `eval_set` 已被加难（`correct_by` 显示连 14B 也只有 83%，C「发现型」类历史可解率仅 53%），一个 2B 模型不可能到 93%；且开 thinking 反而更差。CLINC/BANKING 的历史值仍可精确复现，证明评测链路正确。详见评测报告的「分析 B」。
+> ✅ **2026-07-20 修正（撤回 07-15 的错误结论）**：cpu_routing 的文档 ~93% **是真实可复现的**——Qwen3.5-2B FP16 + **SDPA** = **93.1%**。此前测得 ~60% 是 `ATTENTION_BACKEND=PA` 的精度 bug（见注意事项 6 / 报告 §8），**不是** eval_set 太难。CLINC/BANKING 无论 PA/SDPA 都精确复现文档。
 
-**Qwen3.5-2B 实测（2026-07-15，本机 OpenVINO，全量）：**
+**Qwen3.5-2B 实测（cpu_routing 为 SDPA 正确值，2026-07-20）：**
 
-| 任务 | 数据集 | prompt | FP16 | INT4-g128（推荐, iGPU） | 旧 INT4(g=-1) | 历史文档值 |
-|---|---|---|---:|---:|---:|---:|
-| 中文 4 类路由 | eval_set (58) | `cpu_routing_qwen3.5` | 60.3% | 51.7% | 37.9% | ~~93%~~（旧集合） |
-| CLINC150 10-domain | clinc (4500) | `clinc_domain_qwen3.5` | 78.0% | 75.7% | 52.1% | ≈78% ✓ |
-| BANKING cluster10 | banking_cluster10 (3080) | `banking_cluster10_qwen3.5` | 72.9% | 70.2% | 45.4% | ≈73% ✓ |
+| 任务 | 数据集 | prompt | FP16 | INT8 | INT4-g128 | 旧 INT4(g=-1) | 历史文档值 |
+|---|---|---|---:|---:|---:|---:|---:|
+| 中文 4 类路由 | eval_set (58) | `cpu_routing_qwen3.5` | **93.1%** | 75.9% | 51.7% | 34.5% | ≈93% ✓ |
+| CLINC150 10-domain | clinc (4500) | `clinc_domain_qwen3.5` | 78.0% | 76.2% | 75.7% | 52.1% | ≈78% ✓ |
+| BANKING cluster10 | banking_cluster10 (3080) | `banking_cluster10_qwen3.5` | 72.9% | 72.1% | 70.2% | 45.4% | ≈73% ✓ |
+
+> ⚠️ cpu_routing 对量化极敏感（FP16 93→INT4-g128 51），与 CLINC/BANKING（INT4-g128≈FP16）不同。
+>
+> ✅ **补充实验（2026-07-21）：中文/混合校准 AWQ 救回 cpu_routing。** cpu_routing 是中文、CLINC/BANKING 是英文；用通用中英混合语料做 AWQ 并叠加 20% INT8 混合精度（`INT4 g128 +AWQ(mixed)+ratio0.8`）→ **cpu 82.8 / CLINC 74.3 / BANKING 69.2**（三任务均值 75.4≈INT8），模型仍 1.3G≈纯 4-bit。这是「INT4 又不在三个数据集上明显掉精度」的最佳方案。脚本 `requant_nncf_vlm.py`，校准集 `data/{zh,mixed}_calib.txt`，详见报告 §8.5。
+
+| INT4 变体（2B） | cpu_routing(zh) | CLINC(en) | BANKING(en) | 均值 |
+|---|---:|---:|---:|---:|
+| g128（原纯 4-bit） | 51.7 | 75.7 | 70.2 | 65.9 |
+| g128 +AWQ(mixed) +ratio0.8 ★ | **82.8** | 74.3 | 69.2 | **75.4** |
 
 Qwen3-1.7B（FP16 参考，GPU）：cpu_routing 69.0% / CLINC 67.6% / BANKING 57.9%。
 - **GPU（非对称）推荐 `INT4-g128 + AWQ`**：CLINC 54.0% / BANKING 55.1%（仅 g128 只有 44.9% / 46.6%，小模型需叠 AWQ）。
