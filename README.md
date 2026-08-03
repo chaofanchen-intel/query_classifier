@@ -155,6 +155,7 @@ python plot_confusion.py
 4. **量化配置对准确率影响极大（2026-07-15 实测）**：`INT4 group_size=-1 逐通道对称`（激进）会大掉 20–25pp，NPU 上甚至输出垃圾 token。请用 `INT4 group_size=128`（iGPU 用非对称，NPU 因硬件要求对称需配 `--ratio 0.8` 混合精度）。详见 [reports/REPORT_Qwen3-1.7B-NPU_Qwen3.5-2B-iGPU.md](reports/REPORT_Qwen3-1.7B-NPU_Qwen3.5-2B-iGPU.md)。
 5. **NPU 需要对称量化**：非对称 INT4 在 NPU 编译失败（`ZE_RESULT_ERROR_INVALID_ARGUMENT`）。NPU 运行还需 `NPU_TURBO=YES` + `MAX_PROMPT_LEN`/`MIN_RESPONSE_LEN`/`NPUW_LLM_PREFILL_CHUNK_SIZE`（脚本按设备自动注入，见 `pipe_config.py`）。
 6. **🔴 GPU 用 SDPA，勿用 PA on 2B-VLM（2026-07-20）**：`ATTENTION_BACKEND=PA` 会**静默**把 Qwen3.5-2B（VLMPipeline）在 cpu_routing 上的精度从 **93.1%（SDPA）打到 60.3%**。范围仅 2B-VLM×cpu_routing（CLINC/BANKING 及全部 1.7B-LLM 的 PA/SDPA 一致）。`pipe_config.py` 已默认 SDPA；PA 仅对 1.7B-LLM 正确且更快，可显式 opt-in。详见报告 §8。
+   **根因已定位（2026-08-03）**：不是 PA 本身，是"前缀缓存（prefix caching）+ Qwen3.5 hybrid 线性注意力（Gated-DeltaNet）状态检查点复用"的交互 bug——只翻转 `enable_prefix_caching` 即可复现/修复（关掉后 PA 精度回到 93.1%，但也失去 PA 在此类工作负载上的主要速度优势，效果约等于 SDPA）。CLINC/BANKING 经对照实验确认真的不受影响，但排除了"prompt 长度"这类简单解释，机制上不能假设其它任务天然安全。SDPA/PA 的 TTFT 优化（opt-1~opt-5）已全部合入 `benchmark/openvino` 工作树，已到现有方法的 floor。详见 [reports/REPORT_PA精度根因定位与SDPA_TTFT优化现状_Qwen3.5-2B.md](reports/REPORT_PA精度根因定位与SDPA_TTFT优化现状_Qwen3.5-2B.md)。
 
 ## 10. 参考准确率
 
