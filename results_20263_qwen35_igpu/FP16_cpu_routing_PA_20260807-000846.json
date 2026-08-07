@@ -1,0 +1,65 @@
+{
+  "runtime": "OpenVINO 2026.3",
+  "runtime_version": "2026.3.0-22452-c2638477a62-qwen-ttft-optimizations",
+  "model": "FP16",
+  "model_dir": "/home/chaofan/model_benchmark/benchmark/models/Qwen3.5-2B-FP16",
+  "dataset": "cpu_routing",
+  "device": "GPU.0",
+  "attention_backend": "PA",
+  "prefix_caching": true,
+  "samples": 2,
+  "correct": 2,
+  "accuracy": 1.0,
+  "load_seconds": 10.215300798416138,
+  "token_stats": {
+    "query_tokens": {
+      "min": 11,
+      "p50": 18.5,
+      "mean": 18.5,
+      "max": 26
+    },
+    "prompt_tokens": {
+      "min": 653,
+      "p50": 660.5,
+      "mean": 660.5,
+      "max": 668
+    },
+    "shared_prefix_tokens": {
+      "min": 633,
+      "p50": 633,
+      "mean": 633,
+      "max": 633
+    }
+  },
+  "ttft_ms": {
+    "cold": 641.9804019387811,
+    "p50": 319.28503990639,
+    "p95": 319.28503990639,
+    "mean": 319.28503990639
+  },
+  "per_query": [
+    {
+      "query": "Intel core ultra 5 processor 125u是否支持H.265（HEVC）硬件编解码？",
+      "gold": "A",
+      "pred": "A",
+      "raw": "A",
+      "query_tokens": 26,
+      "prompt_tokens": 668,
+      "system_prompt_tokens": 623,
+      "shared_prefix_tokens": 0,
+      "ttft_ms": 641.9804019387811
+    },
+    {
+      "query": "i5-1235U的价格是多少？",
+      "gold": "A",
+      "pred": "A",
+      "raw": "A",
+      "query_tokens": 11,
+      "prompt_tokens": 653,
+      "system_prompt_tokens": 623,
+      "shared_prefix_tokens": 633,
+      "ttft_ms": 319.28503990639
+    }
+  ],
+  "timestamp": "2026-08-06T16:08:46.779648+00:00"
+}

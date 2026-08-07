@@ -1,5 +1,9 @@
 # 量化全量对比评测报告：Qwen3-1.7B / Qwen3.5-2B × FP16 / INT8 / INT4（多设备）
 
+> **2026.3 重测订正（2026-08-07）**：Qwen3.5-2B iGPU 已基于 OpenVINO 2026.3 runtime 重新完成 FP16/INT8/INT4/g128/AWQ/混合精度共 24 个模型×数据集评测。当前结果、每条 query/prompt token 数和逐条 TTFT 见 [REPORT_Qwen3.5-2B_iGPU_2026.3重测.md](REPORT_Qwen3.5-2B_iGPU_2026.3重测.md) 及 [results_20263_qwen35_igpu](../results_20263_qwen35_igpu)。最重要变化是：**PA + prefix caching 下 FP16 cpu_routing=93.1%，旧版 2026.2.1 的 60.3% issue 在 2026.3 未复现**。本文中 2026.2.1 的 Qwen3.5-2B iGPU 数字保留为历史基线，不再代表当前 runtime。
+
+> **性能订正**：同一份 2026.3 build 的 1k 输入 / 512 输出 iGPU 压测已完成，PA/SDPA 已对全部 8 个 Qwen3.5-2B 量化变体逐一测试。PA FP16 / INT4-g128 的 TTFT 为 `438.0 / 348.8 ms`，SDPA 为 `572.9 / 495.2 ms`；旧 2026.2.1 为 `356.3 / 304.9 ms`（PA）和 `496.4 / 448.3 ms`（SDPA）。TPOT/TPS 也发生回退。2026.3 本次升级确认带来 correctness 改善，但没有带来性能改善，详见专用重测报告。
+
 - 日期：2026-07-18（准确率）/ 2026-07-20（TTFT/TPS/TPOT 性能压测）
 - 环境：本机源码优化版 OpenVINO（`benchmark/openvino/install/`，`2026.2.1-…-qwen-ttft-optimizations`）+ `openvino_genai` + `qwen_env`
 - 设备：`GPU.0`(iGPU, Intel Graphics) / `GPU.1`(dGPU, Arc Pro B70) / `NPU`(AI Boost)

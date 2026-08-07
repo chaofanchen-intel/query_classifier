@@ -1,5 +1,9 @@
 # Qwen3.5-2B VLM：PA 精度 bug 根因定位 + SDPA/PA TTFT 优化现状复核
 
+> **2026.3 重测订正（2026-08-07）**：基于 OpenVINO/OpenVINO GenAI 2026.3 runtime 的 Qwen3.5-2B iGPU 全量重测已完成。PA + prefix caching 开启时，FP16 `cpu_routing=93.1% (54/58)`，与 PA 关闭 prefix caching 的结果一致；旧版 2026.2.1 的 `60.3%` 精度问题在 2026.3 未复现。新的完整准确率、query/prompt token 统计和逐条 TTFT 见 [REPORT_Qwen3.5-2B_iGPU_2026.3重测.md](REPORT_Qwen3.5-2B_iGPU_2026.3重测.md)。本文 §2 的 2026.2.1 实验结论保留为历史对照，不能直接用于判断 2026.3。
+
+> **性能补充**：2026.3 的 1k→512 iGPU 压测已对全部 8 个 Qwen3.5-2B 变体分别测试 PA/SDPA；TTFT、TPOT、TPS 均不优于 2026.2.1。correctness 已改善，但性能出现回退。具体数字和口径见专用重测报告。
+
 > 任务背景：`README.md` 注意事项 6 / `pipe_config.py` docstring 已记录 **`ATTENTION_BACKEND=PA` 会把 Qwen3.5-2B（VLMPipeline）在中文 `cpu_routing` 任务上的精度从 93.1%（SDPA）打到 60.3%**，但 CLINC/BANKING（同模型、同 VLM 管线）不受影响，根因当时标注为"疑与 Qwen3.5 hybrid/Gated-DeltaNet 注意力在 paged 实现下的掩码/位置处理有关"（推测，未坐实）。
 >
 > 本文目的：① 把这个"疑似"根因坐实到具体机制（用真实 GPU 做受控实验，而非只读代码猜测）；② 复核现有 SDPA/PA TTFT 优化文档（`benchmark/tests/OV源码优化降低TTFT_{SDPA,PA}.md`、`benchmark/openvino/qwen3.5_patch/`）是否还有进一步降 TTFT 的空间。
