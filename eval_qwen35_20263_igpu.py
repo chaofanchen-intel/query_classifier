@@ -75,7 +75,14 @@ def percentile(values: list[float], fraction: float) -> float:
     return values[min(len(values) - 1, int(len(values) * fraction))]
 
 
-def evaluate(model_tag: str, dataset: str, backend: str, limit: int | None) -> Path:
+def evaluate(
+    model_tag: str,
+    dataset: str,
+    backend: str,
+    prefix_caching: bool,
+    cache_interval_multiplier: int | None,
+    limit: int | None,
+) -> Path:
     model_dir = MODEL_ROOT / MODELS[model_tag]
     data_path, label_key, query_key, user_prefix = DATASETS[dataset]
     prompt_path = ROOT / "prompts" / PROMPTS[dataset]
@@ -107,7 +114,9 @@ def evaluate(model_tag: str, dataset: str, backend: str, limit: int | None) -> P
         item["shared_prefix_tokens"] = prefix_length(item["ids"], rendered[index - 1]["ids"]) if index else 0
 
     scheduler = ov_genai.SchedulerConfig()
-    scheduler.enable_prefix_caching = True
+    scheduler.enable_prefix_caching = prefix_caching
+    if cache_interval_multiplier is not None:
+        scheduler.cache_interval_multiplier = cache_interval_multiplier
     scheduler.max_num_batched_tokens = 100000
     props = {"ATTENTION_BACKEND": backend, "scheduler_config": scheduler}
     print(f"[{model_tag}/{dataset}/{backend}] loading {model_dir}", flush=True)
@@ -146,7 +155,8 @@ def evaluate(model_tag: str, dataset: str, backend: str, limit: int | None) -> P
         "dataset": dataset,
         "device": "GPU.0",
         "attention_backend": backend,
-        "prefix_caching": True,
+        "prefix_caching": prefix_caching,
+        "cache_interval_multiplier": cache_interval_multiplier,
         "samples": len(rendered),
         "correct": correct,
         "accuracy": correct / len(rendered),
@@ -161,7 +171,9 @@ def evaluate(model_tag: str, dataset: str, backend: str, limit: int | None) -> P
         "timestamp": datetime.now(timezone.utc).isoformat(),
     }
     OUTPUT_ROOT.mkdir(parents=True, exist_ok=True)
-    out = OUTPUT_ROOT / f"{model_tag}_{dataset}_{backend}_{datetime.now().strftime('%Y%m%d-%H%M%S')}.json"
+    cache_tag = "prefix_on" if prefix_caching else "prefix_off"
+    interval_tag = f"_interval{cache_interval_multiplier}" if cache_interval_multiplier is not None else ""
+    out = OUTPUT_ROOT / f"{model_tag}_{dataset}_{backend}_{cache_tag}{interval_tag}_{datetime.now().strftime('%Y%m%d-%H%M%S')}.json"
     out.write_text(json.dumps(output, ensure_ascii=False, indent=2), encoding="utf-8")
     print(f"[{model_tag}/{dataset}] accuracy={output['accuracy']:.1%} ttft_p50={output['ttft_ms']['p50']:.1f}ms -> {out}", flush=True)
     return out
@@ -173,10 +185,13 @@ def main() -> None:
     parser.add_argument("--datasets", nargs="+", choices=list(DATASETS), default=list(DATASETS))
     parser.add_argument("--backend", choices=("PA", "SDPA"), default="PA")
     parser.add_argument("--limit", type=int)
+    parser.add_argument("--prefix-caching", choices=("on", "off"), default="on")
+    parser.add_argument("--cache-interval-multiplier", type=int)
     args = parser.parse_args()
+    prefix_caching = args.prefix_caching == "on"
     for model in args.models:
         for dataset in args.datasets:
-            evaluate(model, dataset, args.backend, args.limit)
+            evaluate(model, dataset, args.backend, prefix_caching, args.cache_interval_multiplier, args.limit)
 
 
 if __name__ == "__main__":
